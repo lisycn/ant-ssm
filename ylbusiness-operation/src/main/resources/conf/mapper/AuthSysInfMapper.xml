@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuanlai.agent.dao.AuthSysInfDao" >
+  <resultMap id="BaseResultMap" type="com.yuanlai.agent.entity.AuthSysInf" >
+    <id column="SYS_ID" property="sysId" jdbcType="VARCHAR" />
+    <result column="SYS_NAM" property="sysName" jdbcType="VARCHAR" />
+    <result column="SYS_URL" property="sysUrl" jdbcType="VARCHAR" />
+    <result column="SYS_DESC" property="sysDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    SYS_ID, SYS_NAM, SYS_URL, SYS_DESC
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from AUTH_SYS_INF
+    where SYS_ID = #{sysId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from AUTH_SYS_INF
+    where SYS_ID = #{sysId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yuanlai.agent.entity.AuthSysInf" >
+    insert into AUTH_SYS_INF (SYS_ID, SYS_NAME, SYS_URL, 
+      SYS_DESC)
+    values (#{sysId,jdbcType=VARCHAR}, #{sysName,jdbcType=VARCHAR}, #{sysUrl,jdbcType=VARCHAR}, 
+      #{sysDesc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuanlai.agent.entity.AuthSysInf" >
+    insert into AUTH_SYS_INF
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sysId != null" >
+        SYS_ID,
+      </if>
+      <if test="sysName != null" >
+        SYS_NAME,
+      </if>
+      <if test="sysUrl != null" >
+        SYS_URL,
+      </if>
+      <if test="sysDesc != null" >
+        SYS_DESC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sysId != null" >
+        #{sysId,jdbcType=VARCHAR},
+      </if>
+      <if test="sysName != null" >
+        #{sysName,jdbcType=VARCHAR},
+      </if>
+      <if test="sysUrl != null" >
+        #{sysUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="sysDesc != null" >
+        #{sysDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuanlai.agent.entity.AuthSysInf" >
+    update AUTH_SYS_INF
+    <set >
+      <if test="sysName != null" >
+        SYS_NAME = #{sysName,jdbcType=VARCHAR},
+      </if>
+      <if test="sysUrl != null" >
+        SYS_URL = #{sysUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="sysDesc != null" >
+        SYS_DESC = #{sysDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where SYS_ID = #{sysId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuanlai.agent.entity.AuthSysInf" >
+    update AUTH_SYS_INF
+    set SYS_NAME = #{sysName,jdbcType=VARCHAR},
+      SYS_URL = #{sysUrl,jdbcType=VARCHAR},
+      SYS_DESC = #{sysDesc,jdbcType=VARCHAR}
+    where SYS_ID = #{sysId,jdbcType=VARCHAR}
+  </update>
+  <sql id="pageHeader" >
+    <choose >
+      <when test="_databaseId == 'mysql'" />
+      <otherwise >
+        <if test="start != null and end != null" >
+          select * from (select a.*, rownum rn from (
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+  <sql id="pageFooter" >
+    <choose >
+      <when test="_databaseId == 'mysql'" >
+        <if test="start != null and limit != null" >
+          limit ${start}, ${limit}
+        </if>
+      </when>
+      <otherwise >
+        <if test="start != null and end != null" >
+          ) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+  <select id="selectByPager" resultMap="BaseResultMap" parameterType="map" >
+    <include refid="pageHeader" />
+    select
+    <include refid="Base_Column_List" />
+     from AUTH_SYS_INF
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="sysId !=null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysName !=null" >
+         and SYS_NAME = #{sysName,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysUrl !=null" >
+         and SYS_URL = #{sysUrl,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysDesc !=null" >
+         and SYS_DESC = #{sysDesc,jdbcType=VARCHAR}
+      </if>
+    </trim>
+    <include refid="pageFooter" />
+  </select>
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+     from AUTH_SYS_INF
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="sysId !=null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysName !=null" >
+         and SYS_NAME = #{sysName,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysUrl !=null" >
+         and SYS_URL = #{sysUrl,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysDesc !=null" >
+         and SYS_DESC = #{sysDesc,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </select>
+  <select id="countByCondition" resultType="java.lang.Integer" parameterType="map" >
+    select count(1)
+     from AUTH_SYS_INF
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="sysId !=null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysName !=null" >
+         and SYS_NAME = #{sysName,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysUrl !=null" >
+         and SYS_URL = #{sysUrl,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysDesc !=null" >
+         and SYS_DESC = #{sysDesc,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select SYS_ID, SYS_NAM, SYS_URL, SYS_DESC
+    from AUTH_SYS_INF
+  </select>
+</mapper>

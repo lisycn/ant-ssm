@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuanlai.agent.dao.MerchandiseDao">
+	<resultMap type="com.yuanlai.agent.entity.MerchandiseInf" id="MerchandiseMap">
+	
+		    <result property="merchandiseId"       column="MERCHANDISE_ID" /> 
+		    <result property="merchandiseName"     column="MERCHANDISE_NAME" /> 
+		    <result property="merchandiseType"     column="MERCHANDISE_TYPE" /> 
+		    <result property="price"               column="PRICE" /> 
+		    <result property="quantity"            column="QUANTITY" /> 
+		    <result property="des"                column="DES" /> 
+		    <result property="img1"                column="IMG1" /> 
+		    <result property="img2"                column="IMG2" />
+		    <result property="createTime"          column="CREATE_TIME" />
+		    <result property="businessId"          column="BUSINESS_ID" /> 
+		        
+	</resultMap>
+
+	<select id="queryList" parameterType="java.util.Map" resultMap="MerchandiseMap">
+		SELECT MERCHANDISE_ID,MERCHANDISE_NAME, MERCHANDISE_TYPE,
+		PRICE,QUANTITY,DES,IMG1,IMG2,CREATE_TIME
+		FROM merchandise_inf
+		
+		<where>
+		     1=1
+			<if test="merchandiseName!= null and merchandiseName!= ''">
+				AND MERCHANDISE_NAME = #{merchandiseName}
+			</if>
+			<if test="merchandiseId!= null and merchandiseId!= ''">
+				AND MERCHANDISE_ID = #{merchandiseId}
+			</if>
+			<if test="merchandiseType!= null and merchandiseType!= ''">
+				AND MERCHANDISE_TYPE = #{merchandiseType}
+			</if>
+			    AND BUSINESS_ID=#{businessId}
+		</where>
+		ORDER BY CREATE_TIME DESC
+	</select>
+    <delete id="deleteEnerty" parameterType="java.util.Map">
+		DELETE FROM merchandise_inf
+		WHERE MERCHANDISE_ID = #{merchandiseId}
+		and BUSINESS_ID = #{businessId}	 
+	</delete>
+	<insert id="insertEntity" parameterType="java.util.Map">
+		INSERT INTO merchandise_inf(
+		MERCHANDISE_ID,MERCHANDISE_NAME,MERCHANDISE_TYPE,
+		PRICE,QUANTITY,DES,IMG1,IMG2,CREATE_TIME,BUSINESS_ID
+		)VALUES(
+		#{merchandiseId},
+		#{merchandiseName},
+		#{merchandiseType},
+		#{price},
+		#{quantity},
+		#{des},
+		#{img1},
+		#{img2},
+		#{createTime},
+		#{businessId}
+		)
+	</insert>
+	
+</mapper>

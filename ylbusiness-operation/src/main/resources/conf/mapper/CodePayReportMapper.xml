@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuanlai.agent.dao.CodePayReportDao">
+	<resultMap id="BaseResultMap" type="com.yuanlai.agent.entity.CodePayReport">
+		<id column="report_id" jdbcType="INTEGER" property="reportId" />
+		<result column="access_part" jdbcType="VARCHAR" property="accessPart" />
+		<result column="trans_time" jdbcType="TIMESTAMP" property="transTime" />
+		<result column="order_id" jdbcType="VARCHAR" property="orderId" />
+		<result column="account" jdbcType="VARCHAR" property="account" />
+		<result column="channel_code" jdbcType="VARCHAR" property="channelCode" />
+		<result column="amount" jdbcType="DOUBLE" property="amount" />
+		<result column="fee" jdbcType="DOUBLE" property="fee" />
+		<result column="hf_fee" jdbcType="DOUBLE" property="hfFee" />
+		<result column="source_profit" jdbcType="DOUBLE" property="sourceProfit" />
+		<result column="access_profit" jdbcType="DOUBLE" property="accessProfit" />
+		<result column="report_time" jdbcType="TIMESTAMP" property="reportTime" />
+	</resultMap>
+	
+	<insert id="addCodePayReport" parameterType="com.yuanlai.agent.entity.CodePayReport">
+		insert into
+		codepay_report
+		(
+		access_part, trans_time, order_id, account, channel_code, amount,
+		fee, hf_fee, source_profit, access_profit
+		)
+		values
+		(#{accessPart,jdbcType=VARCHAR}, #{transTime,jdbcType=TIMESTAMP},
+		#{orderId,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR},
+		#{channelCode,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE},
+		#{fee,jdbcType=DOUBLE}, #{hfFee,jdbcType=DOUBLE},
+		#{sourceProfit,jdbcType=DOUBLE}, #{accessProfit,jdbcType=DOUBLE})
+	</insert>
+
+	<select id="selectDailyReport" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		access_part, channel_code,
+		sum(amount) amount,
+		sum(fee) fee,
+		sum(hf_fee) hf_fee, sum(source_profit)
+		source_profit,
+		sum(access_profit) access_profit
+		from
+		codepay_report
+		where date_format(trans_time,'%Y-%m-%d') =
+		#{day,jdbcType=VARCHAR}
+		group by access_part, channel_code
+	</select>
+
+	<sql id="pageHeader">
+		<choose>
+			<when test="_databaseId == 'mysql'" />
+			<otherwise>
+				<if test="start != null and end != null">
+					select * from (select a.*, rownum rn from (
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<sql id="pageFooter">
+		<choose>
+			<when test="_databaseId == 'mysql'">
+				<if test="start != null and limit != null">
+					limit ${start}, ${limit}
+				</if>
+			</when>
+			<otherwise>
+				<if test="start != null and end != null">
+					) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="selectByPager" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		<include refid="pageHeader" />
+		SELECT
+		report_id as reportId, access_part as accessPart, trans_time as
+		transTime, channel_code as channelCode, amount, fee as fee,
+		hf_fee as hfFee, source_profit as sourceProfit, access_profit as accessProfit, 
+		report_time as reportTime, order_id as orderId, account as account
+		FROM
+		codepay_report
+		<where>
+			<if test="accessPart != null and accessPart != ''">
+				AND access_part = #{accessPart,jdbcType=VARCHAR}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND order_id = #{orderId,jdbcType=VARCHAR}
+			</if>
+			<if test="account != null and account != ''">
+				AND account = #{account,jdbcType=VARCHAR}
+			</if>
+			<if test="channelCode != null and channelCode != ''">
+				AND channel_code = #{channelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND trans_time &gt;= #{startDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND trans_time &lt;= #{endDate,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+		order by trans_time desc
+		<include refid="pageFooter" />
+	</select>
+
+	<select id="countByCondition" resultType="java.lang.Integer"
+		parameterType="map">
+		select count(1)
+		FROM
+		codepay_report
+		<where>
+			<if test="accessPart != null and accessPart != ''">
+				AND access_part = #{accessPart,jdbcType=VARCHAR}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND order_id = #{orderId,jdbcType=VARCHAR}
+			</if>
+			<if test="account != null and account != ''">
+				AND account = #{account,jdbcType=VARCHAR}
+			</if>
+			<if test="channelCode != null and channelCode != ''">
+				AND channel_code = #{channelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND trans_time &gt;= #{startDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND trans_time &lt;= #{endDate,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,3 @@
+{"rspData":{"total":1,"list":[{"positionno":1,"positioncode":"10001","positionname":"岗位名称1","systemno":"10001","systemname":"业务系统名称1",
+"status":0,"updatedate":"2016-05-21","createdate":"2016-05-21"},{"positionno":2,"positioncode":"10002","positionname":"岗位名称2","systemno":"10002","systemname":"业务系统名称1",
+"status":1,"updatedate":"2016-05-21","createdate":"2016-05-21"}]},"rspMsg":"交易成功","rspCod":"000000"}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- 提供方应用名称信息，从dubbo管理页面知道是哪个应用暴露出来的 -->
+	<!-- <dubbo:application name="tddefauth" /> -->
+
+	<!-- <dubbo:protocol name="dubbo" port="20883" /> -->
+
+	<!-- zookeeper注册中心 -->
+	<!-- <dubbo:registry address="zookeeper://192.168.0.163:2181" /> -->
+	<!-- 压力测试 -->
+	<!-- <dubbo:registry address="zookeeper://192.168.0.154:2182?backup=192.168.0.155:2182,192.168.0.156:2182"/> -->
+</beans>

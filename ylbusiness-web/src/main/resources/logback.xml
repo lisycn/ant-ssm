@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property resource="conf/sysconfig.properties" />
+	<property name="logHome" value="${logFilePath}" />
+	<property name="layoutPattern" value="%d{yyyy-MM-dd.HH:mm:ss.SSS} [%thread] [%logger] %-5level %msg%n" />
+
+	<appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+		<discriminator>
+			<key>_td_logger_id</key>
+			<defaultValue>system</defaultValue>
+		</discriminator>
+		<sift>
+			<timestamp key="byDay" datePattern="yyyyMM/dd"/>
+			<appender name="FILE-${_td_logger_id}" class="ch.qos.logback.core.FileAppender">
+				<file>${logHome}/${byDay}/${_td_logger_id}.log</file>
+				<rollingPolicy class="com.tangdi.def.base.log.TdTimeBasedRollingPolicy" />
+				<encoder>
+					<pattern>${layoutPattern}</pattern>
+				</encoder>
+				<append>true</append>
+				<prudent>true</prudent>
+			</appender>
+		</sift>
+		<timeout>6000</timeout>
+		<maxAppenderCount>500</maxAppenderCount>
+	</appender>
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${layoutPattern}</pattern>
+		</encoder>
+	</appender>
+	
+	<logger name="org.quartz.utils.UpdateChecker" level="INFO" />
+	<logger name="org.apache.zookeeper.ClientCnxn" level="INFO" />
+	<logger name="org.mongodb.driver.cluster" level="INFO" />
+	
+	<!-- <logger name="com.tangdi.def.comm.msg.pack.Pack" level="ERROR" />
+	<logger name="com.tangdi.def.comm.msg.unpack.UnPack" level="ERROR" /> -->
+
+	<root level="TRACE" additivity="false">
+		<appender-ref ref="CONSOLE" /> <!-- 生产环境必须注释 -->
+		<appender-ref ref="SIFT" />
+	</root>
+</configuration>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuanlai.agent.dao.CodePayDailyReportDao">
+	<resultMap id="BaseResultMap" type="com.yuanlai.agent.entity.CodePayDailyReport">
+		<id column="report_id" jdbcType="INTEGER" property="reportId" />
+		<result column="access_part" jdbcType="VARCHAR" property="accessPart" />
+		<result column="trans_date" jdbcType="DATE" property="transDate" />
+		<result column="channel_code" jdbcType="VARCHAR" property="channelCode" />
+		<result column="amount" jdbcType="DOUBLE" property="amount" />
+		<result column="total_fee" jdbcType="DOUBLE" property="totalFee" />
+		<result column="hf_fee" jdbcType="DOUBLE" property="hfFee" />
+		<result column="source_profit" jdbcType="DOUBLE" property="sourceProfit" />
+		<result column="access_profit" jdbcType="DOUBLE" property="accessProfit" />
+		<result column="report_time" jdbcType="TIMESTAMP" property="reportTime" />
+	</resultMap>
+
+	<insert id="addDailyReport" parameterType="com.yuanlai.agent.entity.CodePayDailyReport">
+		insert into codepay_daily_report
+		(
+		access_part, trans_date,
+		channel_code, amount, total_fee,
+		hf_fee, source_profit, access_profit
+		)
+		values (#{accessPart,jdbcType=VARCHAR}, #{transDate,jdbcType=DATE},
+		#{channelCode,jdbcType=VARCHAR}, #{amount,jdbcType=DOUBLE},
+		#{totalFee,jdbcType=DOUBLE},
+		#{hfFee,jdbcType=DOUBLE}, #{sourceProfit,jdbcType=DOUBLE}, #{accessProfit,jdbcType=DOUBLE})
+	</insert>
+
+	<select id="selectMonthReport" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		access_part, channel_code,
+		sum(amount) amount, sum(total_fee) total_fee,
+		sum(hf_fee) hf_fee, sum(source_profit) source_profit,
+		sum(access_profit) access_profit
+		from codepay_daily_report
+		where date_format(trans_date,'%Y-%m') = #{month,jdbcType=VARCHAR}
+		group by access_part, channel_code
+	</select>
+
+	<sql id="pageHeader">
+		<choose>
+			<when test="_databaseId == 'mysql'" />
+			<otherwise>
+				<if test="start != null and end != null">
+					select * from (select a.*, rownum rn from (
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<sql id="pageFooter">
+		<choose>
+			<when test="_databaseId == 'mysql'">
+				<if test="start != null and limit != null">
+					limit ${start}, ${limit}
+				</if>
+			</when>
+			<otherwise>
+				<if test="start != null and end != null">
+					) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="selectByPager" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		<include refid="pageHeader" />
+		SELECT
+		report_id as reportId, access_part as accessPart, trans_date as transDate,
+		channel_code as channelCode, amount, total_fee as totalFee, hf_fee as hfFee, 
+		source_profit as sourceProfit, access_profit as accessProfit, report_time as reportTime
+		FROM
+		codepay_daily_report
+		<where>
+			<if test="accessPart != null and accessPart != ''">
+				AND access_part = #{accessPart,jdbcType=VARCHAR}
+			</if>
+			<if test="transDate != null and transDate != ''">
+				AND trans_date = #{transDate,jdbcType=DATE}
+			</if>
+			<if test="channelCode != null and channelCode != ''">
+				AND channel_code = #{channelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND trans_date &gt;= #{startDate,jdbcType=DATE}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND trans_date &lt;= #{endDate,jdbcType=DATE}
+			</if>
+		</where>
+		order by report_time desc
+		<include refid="pageFooter" />
+	</select>
+
+	<select id="countByCondition" resultType="java.lang.Integer"
+		parameterType="map">
+		select count(1)
+		FROM
+		codepay_daily_report
+		<where>
+			<if test="accessPart != null and accessPart != ''">
+				AND access_part = #{accessPart,jdbcType=VARCHAR}
+			</if>
+			<if test="transDate != null and transDate != ''">
+				AND trans_date = #{transDate,jdbcType=DATE}
+			</if>
+			<if test="channelCode != null and channelCode != ''">
+				AND channel_code = #{channelCode,jdbcType=VARCHAR}
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND trans_date &gt;= #{startDate,jdbcType=DATE}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND trans_date &lt;= #{endDate,jdbcType=DATE}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectTotalReportList" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		access_part, channel_code,
+		sum(amount) amount, sum(total_fee) total_fee,
+		sum(hf_fee) hf_fee, sum(source_profit) source_profit,
+		sum(access_profit) access_profit
+		from codepay_daily_report
+		<where>
+			<if test="accessPart != null and accessPart != ''">
+				and access_part = #{accessPart,jdbcType=VARCHAR}
+			</if>
+		</where>
+		group by access_part, channel_code
+	</select>
+
+</mapper>

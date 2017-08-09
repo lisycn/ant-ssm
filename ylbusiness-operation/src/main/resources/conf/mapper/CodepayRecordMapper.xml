@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuanlai.agent.dao.CodepayRecordDao" >
+	<resultMap id="codepayRecordMap" type="com.yuanlai.agent.entity.CodepayRecord" >
+		<id column="payid" property="payid" jdbcType="VARCHAR" />
+		<result column="account" property="account" jdbcType="VARCHAR" />
+		<result column="amount" property="amount" jdbcType="VARCHAR" />
+		<result column="channel_code" property="channelCode" jdbcType="VARCHAR" />
+		<result column="privatekey" property="privatekey" jdbcType="VARCHAR" />
+		<result column="qrcodeurl" property="qrcodeurl" jdbcType="VARCHAR" />
+		<result column="orderId" property="orderid" jdbcType="VARCHAR" />
+		<result column="proid" property="proid" jdbcType="VARCHAR" />
+		<result column="respcode" property="respcode" jdbcType="VARCHAR" />
+		<result column="respinfo" property="respinfo" jdbcType="VARCHAR" />
+		<result column="trancode" property="trancode" jdbcType="VARCHAR" />
+		<result column="traninfo" property="traninfo" jdbcType="VARCHAR" />
+		<result column="channel" property="channel" jdbcType="VARCHAR" />
+		<result column="accesspart" property="accesspart" jdbcType="VARCHAR" />
+		<result column="createtime" property="createtime" jdbcType="VARCHAR" />
+		<result column="returnurl" property="returnurl" jdbcType="VARCHAR" />
+		<result column="transtatus" property="transtatus" jdbcType="VARCHAR" />
+		<result column="thorderid" property="thorderid" jdbcType="VARCHAR" />
+		<result column="accessid" property="accessid" jdbcType="VARCHAR" />
+		<result column="fee" property="fee" jdbcType="VARCHAR" />
+    	<result column="paytime" property="paytime" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		payid, account, amount, fee, channel_code as 'channelCode', privatekey, qrcodeurl, orderId, proid, respcode, respinfo, trancode, traninfo, channel, accesspart, createtime, returnurl, transtatus, thorderid, accessid, paytime
+	</sql>
+
+	<sql id="pageHeader">
+		<choose>
+			<when test="_databaseId == 'mysql'"/>
+			<otherwise>
+				<if test="start != null and end != null">
+					select * from (select a.*, rownum rn from (
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<sql id="pageFooter">
+		<choose>
+			<when test="_databaseId == 'mysql'">
+				<if test="start != null and limit != null">
+					limit ${start}, ${limit}
+				</if>
+			</when>
+			<otherwise>
+				<if test="start != null and end != null">
+					) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+
+
+	<select id="selectByPager" parameterType="java.util.Map" resultType="java.util.Map">
+		<include refid="pageHeader"/>
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM
+		codepay_record
+
+		<where>
+			<if test="account != null and account != ''">
+				AND account LIKE  CONCAT('%', #{account} ,'%')
+			</if>
+			<if test="orderid != null and orderid != ''">
+				AND orderid LIKE CONCAT('%', #{orderid} ,'%')
+			</if>
+			<if test="transtatus != null and transtatus != ''">
+				AND transtatus = #{transtatus}
+			</if>
+			<if test="payid != null and payid != ''">
+				AND payid = #{payid}
+			</if>
+			<if test="accesspart != null and accesspart != '' and accesspartRole == 'RootOrg' ">
+				AND accesspart = #{accesspart}
+			</if>
+			<if test="accesspartRole != null and accesspartRole != '' and accesspartRole != 'RootOrg'">
+				AND accesspart = #{accesspartRole}
+			</if>
+
+		</where>
+		order by createtime desc
+		<include refid="pageFooter"/>
+	</select>
+
+
+	<select id="countByCondition" resultType="java.lang.Integer" parameterType="map">
+		select count(1)
+		FROM
+		codepay_record
+		<where>
+			<if test="account != null and account != ''">
+				AND account LIKE  CONCAT('%', #{account} ,'%')
+			</if>
+			<if test="orderid != null and orderid != ''">
+				AND orderid LIKE CONCAT('%', #{orderid} ,'%')
+			</if>
+			<if test="transtatus != null and transtatus != ''">
+				AND transtatus = #{transtatus}
+			</if>
+			<if test="payid != null and payid != ''">
+				AND payid = #{payid}
+			</if>
+			<if test="accesspart != null and accesspart != '' and accesspartRole == 'RootOrg' ">
+				AND accesspart = #{accesspart}
+			</if>
+			<if test="accesspartRole != null and accesspartRole != '' and accesspartRole != 'RootOrg'">
+				AND accesspart = #{accesspartRole}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectDailyRecordList" parameterType="java.lang.String" resultMap="codepayRecordMap">
+	    select 
+	    <include refid="Base_Column_List"/>
+	    from codepay_record
+	    where 
+	    left(paytime, 8) = #{paytime,jdbcType=VARCHAR}
+	    and transtatus = '03'
+  	</select>
+</mapper>

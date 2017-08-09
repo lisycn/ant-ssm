@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuanlai.agent.dao.PubDownloadInfDao">
+  <resultMap id="BaseResultMap" type="com.yuanlai.agent.entity.PubDownloadInf">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="SYS_ID" jdbcType="CHAR" property="sysId" />
+    <result column="EXPORT_TYPE" jdbcType="VARCHAR" property="exportType" />
+    <result column="EXPORT_PARAM" jdbcType="VARCHAR" property="exportParam" />
+    <result column="FILE_NAME" jdbcType="VARCHAR" property="fileName" />
+    <result column="FILE_PATH" jdbcType="VARCHAR" property="filePath" />
+    <result column="AUTH_OBJECT" jdbcType="CHAR" property="authObject" />
+    <result column="AUTH_OBJECT_ID" jdbcType="VARCHAR" property="authObjectId" />
+    <result column="FILE_STATUS" jdbcType="CHAR" property="fileStatus" />
+    <result column="IS_DEL" jdbcType="CHAR" property="isDel" />
+    <result column="SAVE_DAYS" jdbcType="VARCHAR" property="saveDays" />
+    <result column="CREATE_O" jdbcType="VARCHAR" property="createO" />
+    <result column="CREATE_T" jdbcType="CHAR" property="createT" />
+    <result column="EXPORT_SEQSIGN" jdbcType="VARCHAR" property="exportSeqsign" />
+  </resultMap>
+  
+  <sql id="All_Column_List">
+    m.ORD_ID,m.ORD_NO, m.CHN_CHK_STS, m.CHN_CHK_STS as CHN_CHK_STS_CC_CHN_CHK_STS,m.SOURCE_TYPE,m.SOURCE_TYPE AS SOURCE_TYPE_CC_ACC_TYPE,
+    m.SOURCE_ID, m.SOURCE_NAME, m.TARGET_TYPE,m.TARGET_TYPE AS TARGET_TYPE_CC_ACC_TYPE, m.TARGET_ID, m.TARGET_NAME,  
+    m.ORD_TYPE,m.ORD_TYPE AS ORD_TYPE_CC_ORD_TYPE, m.IS_GUARANT,m.IS_GUARANT AS IS_GUARANT_CC_IS_GUARANT, m.ORD_NAME, CAST(FORMAT((IFNULL(m.ORD_AMT,'0.0'))/100,2) AS CHAR) ORD_AMT,
+    m.ORD_STS,m.ORD_STS AS ORD_STS_CC_ORD_STS, m.ORD_REMARK, m.CCY, m.REQ_CHN , m.REQ_CHN as REQ_CHN_CC_REQ_CHN, m.REQ_IP, 
+    m.ORG_ID,m.ORG_ID AS ORG_ID_CC_ORG_ID, CAST(FORMAT((IFNULL(m.PAY_FEE_AMT,'0.0'))/100,2) AS CHAR) PAY_FEE_AMT, m.CORE_ACC_STS,m.CORE_ACC_STS AS CORE_ACC_STS_CC_CORE_STS, m.CORE_JRN_NO, 
+    m.CORE_CHK_STS,m.CORE_CHK_STS AS CORE_CHK_STS_CC_CORE_STS, m.CORE_STL_DAT, SOURCE_LOG_NAME, TARGET_LOG_NAME,
+    m.CORE_ACT_DAT, m.ORD_TIM,date_format(m.CRE_TIM,'%Y-%m-%d %H:%i:%s') as CRE_TIM,date_format(m.UPD_TIM,'%Y-%m-%d %H:%i:%s') as UPD_TIM,
+    date_format(m.FINISH_TIM,'%Y-%m-%d %H:%i:%s') as FINISH_TIM,
+    date_format(pay.pay_tim,'%Y-%m-%d %H:%i:%s') as pay_tim
+    
+  </sql>
+  
+  <sql id="Base_Column_List">
+    ID, SYS_ID, EXPORT_TYPE, EXPORT_PARAM, FILE_NAME, FILE_PATH, AUTH_OBJECT, AUTH_OBJECT_ID, 
+    FILE_STATUS, IS_DEL, SAVE_DAYS, CREATE_O, CREATE_T, EXPORT_SEQSIGN
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from PUB_DOWNLOAD_INF
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from PUB_DOWNLOAD_INF
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yuanlai.agent.entity.PubDownloadInf">
+    insert into PUB_DOWNLOAD_INF (ID, SYS_ID, EXPORT_TYPE, 
+      EXPORT_PARAM, FILE_NAME, FILE_PATH, 
+      AUTH_OBJECT, AUTH_OBJECT_ID, FILE_STATUS, 
+      IS_DEL, SAVE_DAYS, CREATE_O, 
+      CREATE_T, EXPORT_SEQSIGN)
+    values (#{id,jdbcType=VARCHAR}, #{sysId,jdbcType=CHAR}, #{exportType,jdbcType=VARCHAR}, 
+      #{exportParam,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{filePath,jdbcType=VARCHAR}, 
+      #{authObject,jdbcType=CHAR}, #{authObjectId,jdbcType=VARCHAR}, #{fileStatus,jdbcType=CHAR}, 
+      #{isDel,jdbcType=CHAR}, #{saveDays,jdbcType=VARCHAR}, #{createO,jdbcType=VARCHAR}, 
+      #{createT,jdbcType=CHAR}, #{exportSeqsign,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuanlai.agent.entity.PubDownloadInf">
+    insert into PUB_DOWNLOAD_INF
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="sysId != null">
+        SYS_ID,
+      </if>
+      <if test="exportType != null">
+        EXPORT_TYPE,
+      </if>
+      <if test="exportParam != null">
+        EXPORT_PARAM,
+      </if>
+      <if test="fileName != null">
+        FILE_NAME,
+      </if>
+      <if test="filePath != null">
+        FILE_PATH,
+      </if>
+      <if test="authObject != null">
+        AUTH_OBJECT,
+      </if>
+      <if test="authObjectId != null">
+        AUTH_OBJECT_ID,
+      </if>
+      <if test="fileStatus != null">
+        FILE_STATUS,
+      </if>
+      <if test="isDel != null">
+        IS_DEL,
+      </if>
+      <if test="saveDays != null">
+        SAVE_DAYS,
+      </if>
+      <if test="createO != null">
+        CREATE_O,
+      </if>
+      <if test="createT != null">
+        CREATE_T,
+      </if>
+      <if test="exportSeqsign != null">
+        EXPORT_SEQSIGN,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sysId != null">
+        #{sysId,jdbcType=CHAR},
+      </if>
+      <if test="exportType != null">
+        #{exportType,jdbcType=VARCHAR},
+      </if>
+      <if test="exportParam != null">
+        #{exportParam,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null">
+        #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="authObject != null">
+        #{authObject,jdbcType=CHAR},
+      </if>
+      <if test="authObjectId != null">
+        #{authObjectId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileStatus != null">
+        #{fileStatus,jdbcType=CHAR},
+      </if>
+      <if test="isDel != null">
+        #{isDel,jdbcType=CHAR},
+      </if>
+      <if test="saveDays != null">
+        #{saveDays,jdbcType=VARCHAR},
+      </if>
+      <if test="createO != null">
+        #{createO,jdbcType=VARCHAR},
+      </if>
+      <if test="createT != null">
+        #{createT,jdbcType=CHAR},
+      </if>
+      <if test="exportSeqsign != null">
+        #{exportSeqsign,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuanlai.agent.entity.PubDownloadInf">
+    update PUB_DOWNLOAD_INF
+    <set>
+      <if test="sysId != null">
+        SYS_ID = #{sysId,jdbcType=CHAR},
+      </if>
+      <if test="exportType != null">
+        EXPORT_TYPE = #{exportType,jdbcType=VARCHAR},
+      </if>
+      <if test="exportParam != null">
+        EXPORT_PARAM = #{exportParam,jdbcType=VARCHAR},
+      </if>
+      <if test="fileName != null">
+        FILE_NAME = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null">
+        FILE_PATH = #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="authObject != null">
+        AUTH_OBJECT = #{authObject,jdbcType=CHAR},
+      </if>
+      <if test="authObjectId != null">
+        AUTH_OBJECT_ID = #{authObjectId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileStatus != null">
+        FILE_STATUS = #{fileStatus,jdbcType=CHAR},
+      </if>
+      <if test="isDel != null">
+        IS_DEL = #{isDel,jdbcType=CHAR},
+      </if>
+      <if test="saveDays != null">
+        SAVE_DAYS = #{saveDays,jdbcType=VARCHAR},
+      </if>
+      <if test="createO != null">
+        CREATE_O = #{createO,jdbcType=VARCHAR},
+      </if>
+      <if test="createT != null">
+        CREATE_T = #{createT,jdbcType=CHAR},
+      </if>
+      <if test="exportSeqsign != null">
+        EXPORT_SEQSIGN = #{exportSeqsign,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuanlai.agent.entity.PubDownloadInf">
+    update PUB_DOWNLOAD_INF
+    set SYS_ID = #{sysId,jdbcType=CHAR},
+      EXPORT_TYPE = #{exportType,jdbcType=VARCHAR},
+      EXPORT_PARAM = #{exportParam,jdbcType=VARCHAR},
+      FILE_NAME = #{fileName,jdbcType=VARCHAR},
+      FILE_PATH = #{filePath,jdbcType=VARCHAR},
+      AUTH_OBJECT = #{authObject,jdbcType=CHAR},
+      AUTH_OBJECT_ID = #{authObjectId,jdbcType=VARCHAR},
+      FILE_STATUS = #{fileStatus,jdbcType=CHAR},
+      IS_DEL = #{isDel,jdbcType=CHAR},
+      SAVE_DAYS = #{saveDays,jdbcType=VARCHAR},
+      CREATE_O = #{createO,jdbcType=VARCHAR},
+      CREATE_T = #{createT,jdbcType=CHAR},
+      EXPORT_SEQSIGN = #{exportSeqsign,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ID, SYS_ID, EXPORT_TYPE, EXPORT_PARAM, FILE_NAME, FILE_PATH, AUTH_OBJECT, 
+    AUTH_OBJECT_ID, FILE_STATUS, IS_DEL, SAVE_DAYS, CREATE_O, CREATE_T, EXPORT_SEQSIGN
+    from PUB_DOWNLOAD_INF
+  </select>
+  
+  <sql id="pageHeader">
+    <choose>
+        <when test="_databaseId == 'mysql'" />
+        <otherwise>
+            <if test="start != null and end != null">
+                select * from (select a.*, rownum rn from (
+            </if>
+        </otherwise>
+    </choose>
+  </sql>
+  <sql id="pageFooter">
+    <choose>
+        <when test="_databaseId == 'mysql'">
+            <if test="start != null and limit != null">
+                limit ${start}, ${limit}
+            </if>
+        </when>
+        <otherwise>
+            <if test="start != null and end != null">
+                ) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+            </if>
+        </otherwise>
+    </choose>
+  </sql>
+  
+  <sql id="countListHeader">
+    <if test="countList == 'countList' ">
+        select count(1) total from (
+    </if>
+  </sql>
+  <sql id="countListFooter">
+    <if test="countList == 'countList' ">
+        )countList
+    </if>
+  </sql>
+  
+  <select id="updSeqSign" parameterType="java.util.Map">
+  	update
+  		PUB_DOWNLOAD_INF
+  	set
+  		EXPORT_SEQSIGN =#{EXPORT_SEQSIGN}
+  	where 
+  		FILE_STATUS=#{FILE_STATUS}
+  </select>
+  
+  <select id="queryNotCre" resultType="java.util.Map">
+  	select 
+  		<include refid="Base_Column_List" />
+  	from 
+  		PUB_DOWNLOAD_INF
+  	where
+  		FILE_STATUS=#{FILE_STATUS} AND EXPORT_SEQSIGN =#{EXPORT_SEQSIGN} order by create_t
+  </select>
+  
+  <select id="qryOrdMainInfList" resultType="java.util.Map">
+  	<include refid="countListHeader" />
+  	<include refid="pageHeader" />
+  	
+  	select a.* from (
+  	select  
+  		<include refid="All_Column_List" />
+    from 
+        ORD_MAIN_INF m left join ORD_PAY_INF pay on m.ord_id = pay.ord_id
+    where
+    	1=1
+    	<if test="ORD_TYPE !=null and ORD_TYPE != '' ">
+    		and m.ORD_TYPE= #{ORD_TYPE}  
+    	</if>
+    	<if test="ORD_STS !=null and ORD_STS != '' ">
+    		and m.ORD_STS= #{ORD_STS}  
+    	</if>
+    	<if test="ORD_ID !=null and ORD_ID !=''">
+    		and m.ORD_ID= #{ORD_ID} 
+    	</if>
+        <if test="ORD_NAME !=null and ORD_NAME !=''">
+            and m.ORD_NAME like CONCAT('%',#{ORD_NAME},'%')
+        </if>
+    	<if test="START_DAT !=null and START_DAT !=''">
+    		and m.CRE_TIM &gt; #{START_DAT}
+    	</if>
+    	<if test="END_DAT !=null and END_DAT !=''">
+    		and m.CRE_TIM &lt; #{END_DAT}
+    	</if>
+    	<if test="PAY_START_DAT !=null and PAY_START_DAT !=''">
+    		and m.CRE_TIM &gt; #{PAY_START_DAT}
+    	</if>
+    	<if test="PAY_END_DAT !=null and PAY_END_DAT !=''">
+    		and m.CRE_TIM &lt; #{PAY_END_DAT}
+    	</if>
+    	<if test="SOURCE_ID !=null and SOURCE_ID !=''">
+    		and m.SOURCE_ID = #{SOURCE_ID} 
+    	</if>
+    	<if test="SOURCE_NAME !=null and SOURCE_NAME !=''">
+    		and m.SOURCE_NAME like CONCAT('%',#{SOURCE_NAME},'%')  
+    	</if>
+    	<if test="TARGET_NAME !=null and TARGET_NAME !=''">
+    		and m.TARGET_NAME like CONCAT('%',#{TARGET_NAME},'%')
+    	</if>
+    	<if test="SOURCE_TYPE !=null and SOURCE_TYPE !=''">
+    		and m.SOURCE_TYPE = #{SOURCE_TYPE} 
+    	</if>
+    	<if test="TARGET_TYPE !=null and TARGET_TYPE !=''">
+    		and m.TARGET_TYPE = #{TARGET_TYPE} 
+    	</if>
+    	<if test="SOURCE_LOG_NAME !=null and SOURCE_LOG_NAME !=''">
+    		and m.SOURCE_LOG_NAME like CONCAT('%',#{SOURCE_LOG_NAME},'%') 
+    	</if>
+    	<if test="TARGET_LOG_NAME !=null and TARGET_LOG_NAME !=''">
+    		and m.TARGET_LOG_NAME like CONCAT('%',#{TARGET_LOG_NAME},'%') 
+    	</if>
+    	<if test="BEG_MONEY !=null and BEG_MONEY !=''">
+    		 and (( IFNULL ( m.ORD_AMT, '0.0' )) / 100  &gt;= ${BEG_MONEY} 
+    	</if>
+    	<if test="END_MONEY !=null and END_MONEY !=''">
+    		 and (( IFNULL ( m.ORD_AMT, '0.0' )) / 100 &lt;= ${END_MONEY} 
+    	</if>
+    	<if test="BEG_MONEY !=null and BEG_MONEY !=''">
+    		 and (( IFNULL ( m.ORD_AMT, '0.0' )) / 100  &gt;= ${BEG_MONEY} 
+    	</if>
+    	<if test="END_MONEY !=null and END_MONEY !=''">
+    		 and (( IFNULL ( m.ORD_AMT, '0.0' )) / 100 &lt;= ${END_MONEY} 
+    	</if>
+    	<if test="ORD_NAME !=null and ORD_NAME !=''">
+    		 and m.ORD_NAME like CONCAT('%',#{ORD_NAME},'%')
+    	</if>
+    	
+    union
+    	
+    select  
+  		<include refid="All_Column_List" />
+    from 
+    	ORD_MAIN_INF_HIS m left join ORD_PAY_INF_HIS pay on m.ord_id = pay.ord_id 
+    where
+    	m.ord_id = pay.ord_id
+    	<if test="ORD_TYPE !=null and ORD_TYPE != '' ">
+    		and m.ORD_TYPE= #{ORD_TYPE}  
+    	</if>
+    	<if test="ORD_STS !=null and ORD_STS != '' ">
+    		and m.ORD_STS= #{ORD_STS}  
+    	</if>
+    	<if test="ORD_ID !=null and ORD_ID !=''">
+    		and m.ORD_ID= #{ORD_ID} 
+    	</if>
+        <if test="ORD_NAME !=null and ORD_NAME !=''">
+            and m.ORD_NAME like CONCAT('%',#{ORD_NAME},'%')
+        </if>
+    	<if test="START_DAT !=null and START_DAT !=''">
+    		and m.CRE_TIM &gt; #{START_DAT}
+    	</if>
+    	<if test="END_DAT !=null and END_DAT !=''">
+    		and m.CRE_TIM &lt; #{END_DAT}
+    	</if>
+    	<if test="SOURCE_ID !=null and SOURCE_ID !=''">
+    		and m.SOURCE_ID = #{SOURCE_ID} 
+    	</if>
+    	<if test="SOURCE_TYPE !=null and SOURCE_TYPE !=''">
+    		and m.SOURCE_TYPE = #{SOURCE_TYPE} 
+    	</if>
+    	<if test="TARGET_TYPE !=null and TARGET_TYPE !=''">
+    		and m.TARGET_TYPE = #{TARGET_TYPE} 
+    	</if>
+    	<if test="SOURCE_LOG_NAME !=null and SOURCE_LOG_NAME !=''">
+    		and m.SOURCE_LOG_NAME like CONCAT('%',#{SOURCE_LOG_NAME},'%') 
+    	</if>
+    	<if test="TARGET_LOG_NAME !=null and TARGET_LOG_NAME !=''">
+    		and m.TARGET_LOG_NAME like CONCAT('%',#{TARGET_LOG_NAME},'%') 
+    	</if>
+    	<if test="BEG_MONEY !=null and BEG_MONEY !=''">
+    		 and m.ORD_AMT &gt;= ${BEG_MONEY} 
+    	</if>
+    	<if test="END_MONEY !=null and END_MONEY !=''">
+    		 and m.ORD_AMT &lt;= ${END_MONEY} 
+    	</if>
+    	)a order by a.cre_tim desc, a.pay_tim desc
+    	<include refid="pageFooter" />
+    	<include refid="countListFooter" />
+  </select>
+  
+  <update id="updateFileStatus" parameterType="java.util.Map">
+  	update 
+  		PUB_DOWNLOAD_INF
+  	set 
+  		FILE_STATUS = #{FILE_STATUS}
+  		,FILE_PATH = #{FILE_PATH}
+  	where
+  		ID = #{ID}
+  </update>
+  
+  <select id="qryDownloadList" resultType="java.util.Map">
+  	<include refid="countListHeader" />
+  	<include refid="pageHeader" />
+  	
+  	select
+  		ID, SYS_ID,EXPORT_TYPE,EXPORT_TYPE as EXPORT_TYPE_CC_EXPORT_TYPE, EXPORT_PARAM, FILE_NAME, FILE_PATH, AUTH_OBJECT, AUTH_OBJECT_ID, 
+    	FILE_STATUS,FILE_STATUS as FILE_STATUS_CC_FILE_STATUS, IS_DEL, SAVE_DAYS, CREATE_O,date_format(CREATE_T,'%Y-%m-%d %H:%i:%s') as CREATE_T,
+        EXPORT_SEQSIGN
+  	from 
+  		PUB_DOWNLOAD_INF
+  	where
+  		1=1
+  		<if test="BGN_DAT !=null and BGN_DAT !='' ">
+  			and LEFT(CREATE_T,8) &gt;= #{BGN_DAT}
+  		</if>
+  		<if test="END_DAT !=null and END_DAT !='' ">
+  			and LEFT(CREATE_T,8) &lt;= #{END_DAT}
+  		</if>
+  		<if test="AUTH_OBJECT_ID !=null and AUTH_OBJECT_ID !='' ">
+  			and AUTH_OBJECT_ID =#{AUTH_OBJECT_ID}
+  		</if>
+  		<if test="SYS_ID !=null and SYS_ID !='' ">
+  			and SYS_ID =#{SYS_ID}
+  		</if>
+  	order by CREATE_T desc
+  	<include refid="pageFooter" />
+    <include refid="countListFooter" />
+    	
+  </select>  
+</mapper>

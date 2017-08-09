@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+	
+	<!-- Redis config start -->
+ 	  <bean id="tdRedisService" class="com.tangdi.def.base.redis.TdRedisService">
+		<property name="ip" value="${redis.ip}" />
+		<property name="port" value="${redis.port}" />
+		<property name="maxActive" value="${redis.maxActive}" />
+		<property name="maxIdle" value="${redis.maxIdle}" />
+		<!-- 本参数可选 -->
+		<!-- <property name="password" value="${redis.password}" />  -->
+	</bean> 
+	<!-- Redis config end -->
+		<bean id="freeMarkerConfigurer"
+		  class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/WEB-INF/classes/conf/template/" />
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="template_update_delay">0</prop>
+				<prop key="default_encoding">UTF-8</prop>
+			</props>
+		</property>
+	</bean>
+	<bean id="tdFreeMarkerService" class="com.tangdi.def.base.freemarker.TdFreeMarkerService">
+		<property name="freeMarkerConfigurer" ref="freeMarkerConfigurer" />
+	</bean>
+</beans>

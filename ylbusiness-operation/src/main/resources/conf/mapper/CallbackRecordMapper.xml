@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuanlai.agent.dao.CallbackRecordDao">
+	<resultMap type="com.yuanlai.agent.entity.CallbackRecord" id="callBackRecordMap">
+		<id property="id" column="ID" />
+		<result property="orderId" column="orderId" />
+		<result property="respCode" column="respCode" />
+		<result property="respInfo" column="respInfo" />
+		<result property="amount" column="amount" />
+		<result property="wXOrderNo" column="WXOrderNo" />
+		<result property="status" column="Status" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		Id, orderId, respCode, respInfo, amount, WXOrderNo as 'wXOrderNo', `Status` as 'status',channel,accesspart,createtime
+	</sql>
+
+	<sql id="pageHeader">
+		<choose>
+			<when test="_databaseId == 'mysql'"/>
+			<otherwise>
+				<if test="start != null and end != null">
+					select * from (select a.*, rownum rn from (
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<sql id="pageFooter">
+		<choose>
+			<when test="_databaseId == 'mysql'">
+				<if test="start != null and limit != null">
+					limit ${start}, ${limit}
+				</if>
+			</when>
+			<otherwise>
+				<if test="start != null and end != null">
+					) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+
+
+	<select id="selectByPager" parameterType="java.util.Map" resultType="java.util.Map">
+		<include refid="pageHeader"/>
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM
+		callback_record
+		<where>
+			<if test="orderId != null and orderId != ''">
+				AND orderId LIKE  CONCAT('%', #{orderId} ,'%')
+			</if>
+			<if test="WXOrderNo != null and WXOrderNo != ''">
+				AND WXOrderNo LIKE CONCAT('%', #{WXOrderNo} ,'%')
+			</if>
+			<if test="status != null and status != ''">
+				AND `Status` LIKE CONCAT('%', #{status} ,'%')
+			</if>
+			<if test="accesspart != null and accesspart != '' and accesspartRole == 'RootOrg' ">
+				AND accesspart = #{accesspart}
+			</if>
+			<if test="accesspartRole != null and accesspartRole != '' and accesspartRole != 'RootOrg'">
+				AND accesspart = #{accesspartRole}
+			</if>
+		</where>
+		order by createtime desc
+		<include refid="pageFooter"/>
+	</select>
+
+
+	<select id="countByCondition" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1)
+		from callback_record
+		<where>
+			<if test="orderId != null and orderId != ''">
+				AND orderId LIKE  CONCAT('%', #{orderId} ,'%')
+			</if>
+			<if test="WXOrderNo != null and WXOrderNo != ''">
+				AND WXOrderNo LIKE CONCAT('%', #{WXOrderNo} ,'%')
+			</if>
+			<if test="status != null and status != ''">
+				AND `Status` LIKE CONCAT('%', #{status} ,'%')
+			</if>
+			<if test="accesspart != null and accesspart != '' and accesspartRole == 'RootOrg' ">
+				AND accesspart = #{accesspart}
+			</if>
+			<if test="accesspartRole != null and accesspartRole != '' and accesspartRole != 'RootOrg'">
+				AND accesspart = #{accesspartRole}
+			</if>
+		</where>
+	</select>
+
+
+</mapper>

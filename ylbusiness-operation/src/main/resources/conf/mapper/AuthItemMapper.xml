@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuanlai.agent.dao.AuthItemDao" >
+  <resultMap id="BaseResultMap" type="com.yuanlai.agent.entity.AuthItem" >
+    <id column="ITM_ID" property="itmId" jdbcType="VARCHAR" />
+    <result column="PARENT_ITM_ID" property="parentItmId" jdbcType="VARCHAR" />    
+    <result column="LEVEL" property="level" jdbcType="CHAR" />    
+    <result column="SYS_ID" property="sysId" jdbcType="VARCHAR" />
+    <result column="ITM_TYP" property="itmTyp" jdbcType="CHAR" />
+    <result column="IS_LEAF" property="isLeaf" jdbcType="CHAR" />
+    <result column="ITM_NAME" property="itmName" jdbcType="VARCHAR" />
+    <result column="ITM_DESC" property="itmDesc" jdbcType="VARCHAR" />
+    <result column="ITM_URL" property="itmUrl" jdbcType="VARCHAR" />
+    <result column="IS_USE" property="isUse" jdbcType="CHAR" />
+    <result column="ICON" property="icon" jdbcType="VARCHAR" />
+    <result column="CRE_OBJ" property="creObj" jdbcType="VARCHAR" />
+    <result column="CRE_TIM" property="creTim" jdbcType="CHAR" />
+    <result column="UPD_OBJ" property="updObj" jdbcType="VARCHAR" />
+    <result column="UPD_TIM" property="updTim" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ITM_ID, PARENT_ITM_ID, LEVEL, SYS_ID, ITM_TYP, IS_LEAF, ITM_NAME, ITM_DESC, ITM_URL, IS_USE, ICON, CRE_OBJ, CRE_TIM, UPD_OBJ, UPD_TIM
+  </sql>
+  <sql id="Base_Column_List_Special" >
+    ITM_ID as 'key',ITM_ID as itmId, PARENT_ITM_ID as parentItmId, LEVEL as level,
+    SYS_ID as sysId, ITM_TYP as itmTyp,IS_LEAF as isLeaf,
+    ITM_NAME as itmName, ITM_DESC as itmDesc, ITM_URL as itmUrl, IS_USE as isUse, ICON as icon,
+    CRE_OBJ as creObj, CRE_TIM as creTim, UPD_OBJ as updObj, UPD_TIM as updTim
+  </sql>
+  
+  <update id="updateItemIsLeaf" parameterType="java.lang.String" >
+    update AUTH_ITEM set IS_LEAF=#{1} where ITM_ID=#{0}
+  </update>
+  
+  <select id="selectMaxByParentItemId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select <include refid="Base_Column_List" />
+    from AUTH_ITEM
+    where PARENT_ITM_ID=#{parentItmId,jdbcType=VARCHAR}
+    order by ITM_ID DESC
+    limit 1
+  </select>
+  <select id="selectByParentItemId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select <include refid="Base_Column_List" />
+    from AUTH_ITEM
+    where PARENT_ITM_ID=#{parentItmId,jdbcType=VARCHAR}
+  </select>  
+   <update id="disOrEnable" parameterType="java.lang.String" >
+    update AUTH_ITEM set IS_USE=#{0},UPD_OBJ=#{2},UPD_TIM=#{3} where ITM_ID=#{1}
+  </update>
+  
+  <select id="selectByItmId" resultType="java.util.Map" parameterType="java.lang.String" >
+    select i.ITM_ID as itmId, i.PARENT_ITM_ID as parentItmId,i.LEVEL as level,
+    	i.SYS_ID as sysId,si.SYS_NAM as sysName,i.ITM_TYP as itmTyp,
+    	i.IS_LEAF as isLeaf,i.ITM_NAME as itmName, i.ITM_DESC as itmDesc, i.ITM_URL as itmUrl, 
+    	i.IS_USE as isUse, i.ICON as icon,
+    	i.CRE_OBJ as creObj,i.CRE_TIM as creTim, i.UPD_OBJ as updObj, i.UPD_TIM as updTim
+	from AUTH_ITEM i left join AUTH_SYS_INF si on i.SYS_ID=si.SYS_ID
+    where i.ITM_ID = #{itmId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from AUTH_ITEM
+    where ITM_ID = #{itmId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from AUTH_ITEM
+    where ITM_ID = #{itmId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yuanlai.agent.entity.AuthItem" >
+    insert into AUTH_ITEM (ITM_ID, PARENT_ITM_ID, LEVEL, SYS_ID, ITM_TYP, IS_LEAF, 
+    	ITM_NAME, ITM_DESC, ITM_URL, IS_USE, ICON, CRE_OBJ, CRE_TIM, UPD_OBJ, UPD_TIM)
+    values (#{itmId,jdbcType=VARCHAR}, #{parentItmId,jdbcType=VARCHAR}, #{level,jdbcType=CHAR},
+      #{sysId,jdbcType=VARCHAR}, #{itmTyp,jdbcType=CHAR}, #{isLeaf,jdbcType=CHAR}, 
+      #{itmName,jdbcType=VARCHAR}, #{itmDesc,jdbcType=VARCHAR}, #{itmUrl,jdbcType=VARCHAR}, 
+      #{isUse,jdbcType=CHAR}, #{icon,jdbcType=VARCHAR},#{creObj,jdbcType=VARCHAR}, 
+      #{creTim,jdbcType=CHAR}, #{updObj,jdbcType=VARCHAR}, #{updTim,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuanlai.agent.entity.AuthItem" >
+    insert into AUTH_ITEM
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="itmId != null" >
+        ITM_ID,
+      </if>
+      <if test="parentItmId != null" >
+        PARENT_ITM_ID,
+      </if>
+      <if test="level != null" >
+        LEVEL,
+      </if>            
+      <if test="sysId != null" >
+        SYS_ID,
+      </if>
+      <if test="itmTyp != null" >
+        ITM_TYP,
+      </if>
+      <if test="isLeaf != null" >
+        IS_LEAF,
+      </if>
+      <if test="itmName != null" >
+        ITM_NAME,
+      </if>
+      <if test="itmDesc != null" >
+        ITM_DESC,
+      </if>
+      <if test="itmUrl != null" >
+        ITM_URL,
+      </if>
+      <if test="isUse != null" >
+        IS_USE,
+      </if>
+      <if test="icon != null" >
+        ICON,
+      </if>      
+      <if test="creObj != null" >
+        CRE_OBJ,
+      </if>
+      <if test="creTim != null" >
+        CRE_TIM,
+      </if>
+      <if test="updObj != null" >
+        UPD_OBJ,
+      </if>
+      <if test="updTim != null" >
+        UPD_TIM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="itmId != null" >
+        #{itmId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentItmId != null" >
+        #{parentItmId,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=CHAR},
+      </if>      
+      <if test="sysId != null" >
+        #{sysId,jdbcType=VARCHAR},
+      </if>
+      <if test="itmTyp != null" >
+        #{itmTyp,jdbcType=CHAR},
+      </if>
+      <if test="isLeaf != null" >
+        #{isLeaf,jdbcType=CHAR},
+      </if>      
+      <if test="itmName != null" >
+        #{itmName,jdbcType=VARCHAR},
+      </if>
+      <if test="itmDesc != null" >
+        #{itmDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="itmUrl != null" >
+        #{itmUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null" >
+        #{isUse,jdbcType=CHAR},
+      </if>
+      <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>      
+      <if test="creObj != null" >
+        #{creObj,jdbcType=VARCHAR},
+      </if>
+      <if test="creTim != null" >
+        #{creTim,jdbcType=CHAR},
+      </if>
+      <if test="updObj != null" >
+        #{updObj,jdbcType=VARCHAR},
+      </if>
+      <if test="updTim != null" >
+        #{updTim,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuanlai.agent.entity.AuthItem" >
+    update AUTH_ITEM
+    <set >
+      <if test="parentItmId != null" >
+        PARENT_ITM_ID = #{parentItmId,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        LEVEL = #{level,jdbcType=CHAR},
+      </if>      
+      <if test="sysId != null" >
+        SYS_ID = #{sysId,jdbcType=VARCHAR},
+      </if>
+      <if test="itmTyp != null" >
+        ITM_TYP = #{itmTyp,jdbcType=CHAR},
+      </if>
+      <if test="isLeaf != null" >
+        IS_LEAF = #{isLeaf,jdbcType=CHAR},
+      </if>      
+      <if test="itmName != null" >
+        ITM_NAME = #{itmName,jdbcType=VARCHAR},
+      </if>
+      <if test="itmDesc != null" >
+        ITM_DESC = #{itmDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="itmUrl != null" >
+        ITM_URL = #{itmUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null" >
+        IS_USE = #{isUse,jdbcType=CHAR},
+      </if>
+      <if test="icon != null" >
+        ICON = #{icon,jdbcType=VARCHAR},
+      </if>      
+      <if test="creObj != null" >
+        CRE_OBJ = #{creObj,jdbcType=VARCHAR},
+      </if>
+      <if test="creTim != null" >
+        CRE_TIM = #{creTim,jdbcType=CHAR},
+      </if>
+      <if test="updObj != null" >
+        UPD_OBJ = #{updObj,jdbcType=VARCHAR},
+      </if>
+      <if test="updTim != null" >
+        UPD_TIM = #{updTim,jdbcType=CHAR},
+      </if>
+    </set>
+    where ITM_ID = #{itmId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuanlai.agent.entity.AuthItem" >
+    update AUTH_ITEM
+    set PARENT_ITM_ID = #{parentItmId,jdbcType=VARCHAR},
+      LEVEL = #{level,jdbcType=CHAR},
+      SYS_ID = #{sysId,jdbcType=VARCHAR},
+      ITM_TYP = #{itmTyp,jdbcType=CHAR},
+      IS_LEAF = #{isLeaf,jdbcType=CHAR},
+      ITM_NAME = #{itmName,jdbcType=VARCHAR},
+      ITM_DESC = #{itmDesc,jdbcType=VARCHAR},
+      ITM_URL = #{itmUrl,jdbcType=VARCHAR},
+      IS_USE = #{isUse,jdbcType=CHAR},
+      ICON = #{icon,jdbcType=VARCHAR},
+      CRE_OBJ = #{creObj,jdbcType=VARCHAR},
+      CRE_TIM = #{creTim,jdbcType=CHAR},
+      UPD_OBJ = #{updObj,jdbcType=VARCHAR},
+      UPD_TIM = #{updTim,jdbcType=CHAR}
+    where ITM_ID = #{itmId,jdbcType=VARCHAR}
+  </update>
+  <sql id="pageHeader" >
+    <choose >
+      <when test="_databaseId == 'mysql'" />
+      <otherwise >
+        <if test="start != null and end != null" >
+          select * from (select a.*, rownum rn from (
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+  <sql id="pageFooter" >
+    <choose >
+      <when test="_databaseId == 'mysql'" >
+        <if test="start != null and limit != null" >
+          limit ${start}, ${limit}
+        </if>
+      </when>
+      <otherwise >
+        <if test="start != null and end != null" >
+          ) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+  <select id="selectByPager" resultType="map" parameterType="map" >
+    <include refid="pageHeader" />
+    select i.ITM_ID as itmId, i.PARENT_ITM_ID as parentItmId, i.LEVEL as level,i.ICON as icon,
+    	i.SYS_ID as sysId,si.SYS_NAM as sysName,i.ITM_TYP as itmTyp,
+    	i.IS_LEAF as isLeaf,i.ITM_NAME as itmName, i.ITM_DESC as itmDesc, i.ITM_URL as itmUrl, 
+    	i.IS_USE as isUse, i.CRE_OBJ as creObj, i.CRE_TIM as creTim, i.UPD_OBJ as updObj, i.UPD_TIM as updTim
+	from AUTH_ITEM i left join AUTH_SYS_INF si on i.SYS_ID=si.SYS_ID
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="itmId !=null" >
+         and i.ITM_ID = #{itmId,jdbcType=VARCHAR}
+      </if>
+      <if test ="parentItmId !=null" >
+         and i.PARENT_ITM_ID = #{parentItmId,jdbcType=VARCHAR}
+      </if>
+      <if test ="level !=null" >
+         and i.LEVEL = #{level,jdbcType=CHAR}
+      </if>         
+      <if test ="sysId !=null" >
+         and i.SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmTyp !=null" >
+         and i.ITM_TYP = #{itmTyp,jdbcType=CHAR}
+      </if>
+      <if test ="isLeaf !=null" >
+         and i.IS_LEAF = #{isLeaf,jdbcType=CHAR}
+      </if>      
+      <if test ="itmName !=null" >
+         and i.ITM_NAME = #{itmName,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmDesc !=null" >
+         and i.ITM_DESC = #{itmDesc,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmUrl !=null" >
+         and i.ITM_URL = #{itmUrl,jdbcType=VARCHAR}
+      </if>
+      <if test ="isUse !=null" >
+         and i.IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="icon !=null" >
+         and i.ICON = #{icon,jdbcType=VARCHAR}
+      </if>      
+      <if test ="creObj !=null" >
+         and i.CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and i.CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and i.UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and i.UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+    <include refid="pageFooter" />
+  </select>
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+     from AUTH_ITEM
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="itmId !=null" >
+         and ITM_ID = #{itmId,jdbcType=VARCHAR}
+      </if>
+      <if test ="parentItmId !=null" >
+         and PARENT_ITM_ID = #{parentItmId,jdbcType=VARCHAR}
+      </if>
+      <if test ="level !=null" >
+         and LEVEL = #{level,jdbcType=CHAR}
+      </if>      
+      <if test ="sysId !=null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmTyp !=null" >
+         and ITM_TYP = #{itmTyp,jdbcType=CHAR}
+      </if>
+      <if test ="isLeaf !=null" >
+         and IS_LEAF = #{isLeaf,jdbcType=CHAR}
+      </if>      
+      <if test ="itmName !=null" >
+         and ITM_NAME = #{itmName,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmDesc !=null" >
+         and ITM_DESC = #{itmDesc,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmUrl !=null" >
+         and ITM_URL = #{itmUrl,jdbcType=VARCHAR}
+      </if>
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="icon !=null" >
+         and ICON = #{icon,jdbcType=VARCHAR}
+      </if>      
+      <if test ="creObj !=null" >
+         and CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+  </select>
+  <select id="countByCondition" resultType="java.lang.Integer" parameterType="map" >
+    select count(1)
+     from AUTH_ITEM
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="itmId !=null" >
+         and ITM_ID = #{itmId,jdbcType=VARCHAR}
+      </if>
+      <if test ="parentItmId !=null" >
+         and PARENT_ITM_ID = #{parentItmId,jdbcType=VARCHAR}
+      </if>
+      <if test ="level !=null" >
+         and LEVEL = #{level,jdbcType=CHAR}
+      </if>      
+      <if test ="sysId !=null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmTyp !=null" >
+         and ITM_TYP = #{itmTyp,jdbcType=CHAR}
+      </if>
+      <if test ="isLeaf !=null" >
+         and IS_LEAF = #{isLeaf,jdbcType=CHAR}
+      </if>      
+      <if test ="itmName !=null" >
+         and ITM_NAME = #{itmName,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmDesc !=null" >
+         and ITM_DESC = #{itmDesc,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmUrl !=null" >
+         and ITM_URL = #{itmUrl,jdbcType=VARCHAR}
+      </if>
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="icon !=null" >
+         and ICON = #{icon,jdbcType=VARCHAR}
+      </if>      
+      <if test ="creObj !=null" >
+         and CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ITM_ID, PARENT_ITM_ID, LEVEL, SYS_ID, ITM_TYP, IS_LEAF, ITM_NAME, ITM_DESC, ITM_URL, IS_USE, 
+    ICON, CRE_OBJ, CRE_TIM, UPD_OBJ, UPD_TIM
+    from AUTH_ITEM
+  </select>
+  
+  <select id="selectItemTreeForTable_parent" resultType="java.util.Map" parameterType="java.util.Map">
+    select i.ITM_ID as 'key',i.ITM_ID as itmId, i.PARENT_ITM_ID as parentItmId, i.LEVEL as level, i.SYS_ID as sysId,
+    		si.SYS_NAM as sysName,i.ITM_TYP as itmTyp, i.IS_LEAF as isLeaf, i.ITM_NAME as itmName,
+			i.ITM_DESC as itmDesc, i.ITM_URL as itmUrl,i.IS_USE as isUse, i.ICON as icon, 
+			i.CRE_OBJ as creObj, i.CRE_TIM as creTim, i.UPD_OBJ as updObj, i.UPD_TIM as updTim
+    from AUTH_ITEM i left join AUTH_SYS_INF si on i.SYS_ID = si.SYS_ID
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="itmName == null" >
+         and length(trim(i.ITM_ID))=3
+      </if>
+      <if test ="itmName != null" >
+         and i.ITM_NAME like CONCAT('%',#{itmName,jdbcType=VARCHAR},'%')     
+      </if>  
+      <if test ="sysId != null" >
+         and i.SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>              
+    </trim>
+  </select>
+  <select id="selectItemTreeForTable_child" resultType="java.util.Map" parameterType="java.util.Map">
+    select i.ITM_ID as 'key',i.ITM_ID as itmId, i.PARENT_ITM_ID as parentItmId, i.LEVEL as level, i.SYS_ID as sysId,
+    		si.SYS_NAM as sysName,i.ITM_TYP as itmTyp, i.IS_LEAF as isLeaf, i.ITM_NAME as itmName,
+			i.ITM_DESC as itmDesc, i.ITM_URL as itmUrl,i.IS_USE as isUse, i.ICON as icon, 
+			i.CRE_OBJ as creObj, i.CRE_TIM as creTim, i.UPD_OBJ as updObj, i.UPD_TIM as updTim
+    from AUTH_ITEM i left join AUTH_SYS_INF si on i.SYS_ID = si.SYS_ID
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="itmName == null" >
+         and length(trim(i.ITM_ID))>3
+      </if>
+      <if test ="itmName != null" >
+         and length(trim(i.ITM_ID))>3
+      </if> 
+      <if test ="sysId != null" >
+         and i.SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>              
+    </trim>
+    order by i.ITM_ID
+    limit #{limit}
+  </select>
+  <select id="countItemTreeForTable_child" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(ITM_ID)
+    from AUTH_ITEM
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="itmName == null" >
+         and length(trim(ITM_ID))>3
+      </if>
+      <if test ="itmName != null" >
+         and length(trim(ITM_ID))>3
+      </if> 
+      <if test ="sysId != null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>              
+    </trim>
+  </select> 
+  <select id="selectRepeat" parameterType="com.yuanlai.agent.entity.AuthItem" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+	from AUTH_ITEM
+	where SYS_ID = #{sysId,jdbcType=VARCHAR} and ITM_NAME = #{itmName,jdbcType=VARCHAR}
+      <if test ="itmId !=null" >
+         and ITM_ID != #{itmId,jdbcType=VARCHAR}
+      </if>	
+  </select>
+</mapper>

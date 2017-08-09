@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuanlai.agent.dao.AuthRoleItemDao" >
+  <resultMap id="BaseResultMap" type="com.yuanlai.agent.entity.AuthRoleItemKey" >
+    <id column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+    <id column="ITM_ID" property="itmId" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <delete id="deleteByRoleId" parameterType="java.lang.String" >
+    delete from AUTH_ROLE_ITEM
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByItemId" parameterType="java.lang.String" >
+    delete from AUTH_ROLE_ITEM where ITM_ID = #{0}
+  </delete>
+
+  <select id="selectLeafItmIdByRoleId" parameterType="java.lang.String" resultType="java.lang.String">
+     select ri.ITM_ID as itmId
+     from AUTH_ROLE_ITEM ri left join AUTH_ITEM i on ri.ITM_ID=i.ITM_ID
+     where ri.ROLE_ID = #{roleId,jdbcType=VARCHAR} and i.IS_LEAF='1'
+  </select>
+
+  <insert id="insertMulti" parameterType="java.util.List" >
+    insert into AUTH_ROLE_ITEM (ROLE_ID, ITM_ID) values
+    <foreach collection="list" item="item" index="index" separator="," >
+    (#{item.roleId},#{item.itmId})
+    </foreach>
+  </insert>
+  
+  <delete id="deleteByPrimaryKey" parameterType="com.yuanlai.agent.entity.AuthRoleItemKey" >
+    delete from AUTH_ROLE_ITEM
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      and ITM_ID = #{itmId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yuanlai.agent.entity.AuthRoleItemKey" >
+    insert into AUTH_ROLE_ITEM (ROLE_ID, ITM_ID)
+    values (#{roleId,jdbcType=VARCHAR}, #{itmId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuanlai.agent.entity.AuthRoleItemKey" >
+    insert into AUTH_ROLE_ITEM
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        ROLE_ID,
+      </if>
+      <if test="itmId != null" >
+        ITM_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="itmId != null" >
+        #{itmId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <sql id="Base_Column_List" >
+    ROLE_ID, ITM_ID
+  </sql>
+  <sql id="pageHeader" >
+    <choose >
+      <when test="_databaseId == 'mysql'" />
+      <otherwise >
+        <if test="start != null and end != null" >
+          select * from (select a.*, rownum rn from (
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+  <sql id="pageFooter" >
+    <choose >
+      <when test="_databaseId == 'mysql'" >
+        <if test="start != null and limit != null" >
+          limit ${start}, ${limit}
+        </if>
+      </when>
+      <otherwise >
+        <if test="start != null and end != null" >
+          ) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+  <select id="selectByPager" resultMap="BaseResultMap" parameterType="map" >
+    <include refid="pageHeader" />
+    select
+    <include refid="Base_Column_List" />
+     from AUTH_ROLE_ITEM
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="roleId !=null" >
+         and ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmId !=null" >
+         and ITM_ID = #{itmId,jdbcType=VARCHAR}
+      </if>
+    </trim>
+    <include refid="pageFooter" />
+  </select>
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+     from AUTH_ROLE_ITEM
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="roleId !=null" >
+         and ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmId !=null" >
+         and ITM_ID = #{itmId,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </select>
+  <select id="countByCondition" resultType="java.lang.Integer" parameterType="map" >
+    select count(1)
+     from AUTH_ROLE_ITEM
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="roleId !=null" >
+         and ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      </if>
+      <if test ="itmId !=null" >
+         and ITM_ID = #{itmId,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ROLE_ID, ITM_ID
+    from AUTH_ROLE_ITEM
+  </select>
+</mapper>

@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuanlai.agent.dao.AuthRoleDao" >
+  <resultMap id="BaseResultMap" type="com.yuanlai.agent.entity.AuthRole" >
+    <id column="ROLE_ID" property="roleId" jdbcType="VARCHAR" />
+    <result column="SYS_ID" property="sysId" jdbcType="VARCHAR" />
+    <result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+    <result column="ROLE_DESC" property="roleDesc" jdbcType="VARCHAR" />
+    <result column="IS_USE" property="isUse" jdbcType="CHAR" />
+    <result column="CRE_OBJ" property="creObj" jdbcType="VARCHAR" />
+    <result column="CRE_TIM" property="creTim" jdbcType="CHAR" />
+    <result column="UPD_OBJ" property="updObj" jdbcType="VARCHAR" />
+    <result column="UPD_TIM" property="updTim" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ROLE_ID, SYS_ID, ROLE_NAME, ROLE_DESC, IS_USE, CRE_OBJ, CRE_TIM, UPD_OBJ, UPD_TIM
+  </sql>
+  <sql id="Base_Column_List_Special" >
+    ROLE_ID as roleId, SYS_ID as sysId, ROLE_NAME as roleName, ROLE_DESC as roleDesc, 
+    IS_USE as isUse, CRE_OBJ as creObj, CRE_TIM as creTim, UPD_OBJ as updObj, UPD_TIM as updTim
+  </sql>
+  <select id="selectRepeat" resultMap="BaseResultMap" parameterType="com.yuanlai.agent.entity.AuthRole">
+    select <include refid="Base_Column_List" />
+	from AUTH_ROLE
+	where SYS_ID = #{sysId,jdbcType=VARCHAR} and ROLE_NAME = #{roleName,jdbcType=VARCHAR}
+		<if test ="roleId !=null" >
+			and ROLE_ID != #{roleId,jdbcType=VARCHAR}
+		</if>
+  </select>
+  <select id="countValidBySysId" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT
+	A.c + B.c AS t
+FROM
+	(
+		SELECT
+			count(AUTH_ROLE.ROLE_ID) AS c
+		FROM
+			AUTH_ROLE
+		WHERE
+			SYS_ID = #{sysId,jdbcType=VARCHAR}
+		AND IS_USE = '1'
+	) A,
+	(
+		SELECT
+			count(agtauth_role.ROLE_ID) AS c
+		FROM
+			agtauth_role
+		WHERE
+			SYS_ID = #{sysId,jdbcType=VARCHAR}
+		AND IS_USE = '1'
+	) B
+  </select>
+  <select id="selectValidBySysId" resultType="java.util.Map" parameterType="java.util.Map">
+    select ROLE_ID as roleId, SYS_ID as sysId, ROLE_NAME as roleName, ROLE_DESC as roleDesc, 
+    		IS_USE as isUse, CRE_OBJ as creObj, CRE_TIM as creTim, UPD_OBJ as updObj, UPD_TIM as updTim
+    from AUTH_ROLE
+    where SYS_ID = #{sysId,jdbcType=VARCHAR} and IS_USE='1'
+    union select ROLE_ID as roleId, SYS_ID as sysId, ROLE_NAME as roleName, ROLE_DESC as roleDesc, 
+    		IS_USE as isUse, CRE_OBJ as creObj, CRE_TIM as creTim, UPD_OBJ as updObj, UPD_TIM as updTim
+    from agtauth_role
+    where SYS_ID = #{sysId,jdbcType=VARCHAR} and IS_USE='1'
+    limit #{limit}
+  </select>
+  <select id="countByMap" resultType="java.lang.Integer" parameterType="java.util.Map" >
+    select count(ROLE_ID)
+    from AUTH_ROLE
+    SELECT
+	A.c + B.c AS t
+FROM
+	(
+		SELECT
+			count(AUTH_ROLE.ROLE_ID) AS c
+		FROM
+			AUTH_ROLE
+		<trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="list !=null" >
+      	and ROLE_ID in 
+      	<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+        	#{item}
+      	</foreach>
+      </if>
+      <if test ="sysId !=null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleName !=null" >
+         and ROLE_NAME = #{roleName,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleDesc !=null" >
+         and ROLE_DESC = #{roleDesc,jdbcType=VARCHAR}
+      </if>
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="creObj !=null" >
+         and CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+	) A,
+	(
+		SELECT
+			count(agtauth_role.ROLE_ID) AS c
+		FROM
+			agtauth_role
+		<trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="list !=null" >
+      	and ROLE_ID in 
+      	<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+        	#{item}
+      	</foreach>
+      </if>
+      <if test ="sysId !=null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleName !=null" >
+         and ROLE_NAME = #{roleName,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleDesc !=null" >
+         and ROLE_DESC = #{roleDesc,jdbcType=VARCHAR}
+      </if>
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="creObj !=null" >
+         and CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+	) B
+    
+  </select>
+  <select id="selectByMap" resultType="java.util.Map" parameterType="java.util.Map" >
+    select ROLE_ID as roleId, SYS_ID as sysId, ROLE_NAME as roleName, ROLE_DESC as roleDesc, 
+    		IS_USE as isUse, CRE_OBJ as creObj, CRE_TIM as creTim, UPD_OBJ as updObj, UPD_TIM as updTim
+    from AUTH_ROLE
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="list !=null" >
+      	and ROLE_ID in 
+      	<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+        	#{item}
+      	</foreach>
+      </if>
+      <if test ="sysId !=null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleName !=null" >
+         and ROLE_NAME = #{roleName,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleDesc !=null" >
+         and ROLE_DESC = #{roleDesc,jdbcType=VARCHAR}
+      </if>
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="creObj !=null" >
+         and CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+    union select ROLE_ID as roleId, SYS_ID as sysId, ROLE_NAME as roleName, ROLE_DESC as roleDesc, 
+    		IS_USE as isUse, CRE_OBJ as creObj, CRE_TIM as creTim, UPD_OBJ as updObj, UPD_TIM as updTim
+    		 from agtauth_role
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="list !=null" >
+      	and ROLE_ID in 
+      	<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+        	#{item}
+      	</foreach>
+      </if>
+      <if test ="sysId !=null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+    </trim>
+    limit #{limit}
+  </select>
+  <update id="disOrEnable" parameterType="java.lang.String" >
+    update AUTH_ROLE set IS_USE=#{0},UPD_OBJ=#{2},UPD_TIM=#{3} where ROLE_ID=#{1}
+  </update>
+
+  <select id="selectByRoleId" resultType="java.util.Map" parameterType="java.lang.String" >
+    select r.ROLE_ID as roleId, r.SYS_ID as sysId, r.ROLE_NAME as roleName, r.ROLE_DESC as roleDesc, 
+            r.IS_USE as isUse, r.CRE_OBJ as creObj, r.CRE_TIM as creTim, r.UPD_OBJ as updObj, 
+            r.UPD_TIM as updTim,si.SYS_NAM as sysName
+    from AUTH_ROLE r left join AUTH_SYS_INF si on r.SYS_ID=si.SYS_ID
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from AUTH_ROLE
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from AUTH_ROLE
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yuanlai.agent.entity.AuthRole" >
+    insert into AUTH_ROLE (ROLE_ID, SYS_ID, ROLE_NAME, 
+      ROLE_DESC, IS_USE, CRE_OBJ, 
+      CRE_TIM, UPD_OBJ, UPD_TIM)
+    values (#{roleId,jdbcType=VARCHAR}, #{sysId,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR},
+      #{roleDesc,jdbcType=VARCHAR}, #{isUse,jdbcType=CHAR}, #{creObj,jdbcType=VARCHAR}, 
+      #{creTim,jdbcType=CHAR}, #{updObj,jdbcType=VARCHAR}, #{updTim,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuanlai.agent.entity.AuthRole" >
+    insert into AUTH_ROLE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        ROLE_ID,
+      </if>
+      <if test="sysId != null" >
+        SYS_ID,
+      </if>
+      <if test="roleName != null" >
+        ROLE_NAME,
+      </if>
+      <if test="roleDesc != null" >
+        ROLE_DESC,
+      </if>
+      <if test="isUse != null" >
+        IS_USE,
+      </if>
+      <if test="creObj != null" >
+        CRE_OBJ,
+      </if>
+      <if test="creTim != null" >
+        CRE_TIM,
+      </if>
+      <if test="updObj != null" >
+        UPD_OBJ,
+      </if>
+      <if test="updTim != null" >
+        UPD_TIM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="sysId != null" >
+        '009',
+      </if>
+      <if test="roleName != null" >
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDesc != null" >
+        #{roleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null" >
+        #{isUse,jdbcType=CHAR},
+      </if>
+      <if test="creObj != null" >
+        #{creObj,jdbcType=VARCHAR},
+      </if>
+      <if test="creTim != null" >
+        #{creTim,jdbcType=CHAR},
+      </if>
+      <if test="updObj != null" >
+        #{updObj,jdbcType=VARCHAR},
+      </if>
+      <if test="updTim != null" >
+        #{updTim,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuanlai.agent.entity.AuthRole" >
+    update AUTH_ROLE
+    <set >
+      <if test="sysId != null" >
+        SYS_ID = #{sysId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleName != null" >
+        ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDesc != null" >
+        ROLE_DESC = #{roleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="isUse != null" >
+        IS_USE = #{isUse,jdbcType=CHAR},
+      </if>
+      <if test="creObj != null" >
+        CRE_OBJ = #{creObj,jdbcType=VARCHAR},
+      </if>
+      <if test="creTim != null" >
+        CRE_TIM = #{creTim,jdbcType=CHAR},
+      </if>
+      <if test="updObj != null" >
+        UPD_OBJ = #{updObj,jdbcType=VARCHAR},
+      </if>
+      <if test="updTim != null" >
+        UPD_TIM = #{updTim,jdbcType=CHAR},
+      </if>
+    </set>
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuanlai.agent.entity.AuthRole" >
+    update AUTH_ROLE
+    set SYS_ID = #{sysId,jdbcType=VARCHAR},
+      ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+      ROLE_DESC = #{roleDesc,jdbcType=VARCHAR},
+      IS_USE = #{isUse,jdbcType=CHAR},
+      CRE_OBJ = #{creObj,jdbcType=VARCHAR},
+      CRE_TIM = #{creTim,jdbcType=CHAR},
+      UPD_OBJ = #{updObj,jdbcType=VARCHAR},
+      UPD_TIM = #{updTim,jdbcType=CHAR}
+    where ROLE_ID = #{roleId,jdbcType=VARCHAR}
+  </update>
+  <sql id="pageHeader" >
+    <choose >
+      <when test="_databaseId == 'mysql'" />
+      <otherwise >
+        <if test="start != null and end != null" >
+          select * from (select a.*, rownum rn from (
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+  <sql id="pageFooter" >
+    <choose >
+      <when test="_databaseId == 'mysql'" >
+        <if test="start != null and limit != null" >
+          limit ${start}, ${limit}
+        </if>
+      </when>
+      <otherwise >
+        <if test="start != null and end != null" >
+          ) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+  <select id="selectByPager" resultType="java.util.Map" parameterType="map" >
+    <include refid="pageHeader" />
+    select r.ROLE_ID as roleId, r.SYS_ID as sysId, r.ROLE_NAME as roleName, r.ROLE_DESC as roleDesc, 
+    		r.IS_USE as isUse, r.CRE_OBJ as creObj, r.CRE_TIM as creTim, r.UPD_OBJ as updObj, 
+    		r.UPD_TIM as updTim,si.SYS_NAM as sysName
+	from AUTH_ROLE r left join AUTH_SYS_INF si on r.SYS_ID=si.SYS_ID
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="roleId !=null" >
+         and r.ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysId !=null" >
+         and r.SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleName !=null" >
+         and r.ROLE_NAME like CONCAT('%',#{roleName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test ="roleDesc !=null" >
+         and r.ROLE_DESC = #{roleDesc,jdbcType=VARCHAR}
+      </if>
+      <if test ="isUse !=null" >
+         and r.IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="creObj !=null" >
+         and r.CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and r.CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and r.UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and r.UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+    order by r.CRE_TIM DESC
+    <include refid="pageFooter" />
+  </select>
+  <select id="countByPager" resultType="java.lang.Integer" parameterType="map" >
+    select count(1)
+	from AUTH_ROLE r left join AUTH_SYS_INF si on r.SYS_ID=si.SYS_ID
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="roleId !=null" >
+         and r.ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysId !=null" >
+         and r.SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleName !=null" >
+         and r.ROLE_NAME like CONCAT('%',#{roleName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test ="roleDesc !=null" >
+         and r.ROLE_DESC = #{roleDesc,jdbcType=VARCHAR}
+      </if>
+      <if test ="isUse !=null" >
+         and r.IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="creObj !=null" >
+         and r.CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and r.CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and r.UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and r.UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+  </select>
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+     from AUTH_ROLE
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="roleId !=null" >
+         and ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysId !=null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleName !=null" >
+         and ROLE_NAME = #{roleName,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleDesc !=null" >
+         and ROLE_DESC = #{roleDesc,jdbcType=VARCHAR}
+      </if>
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="creObj !=null" >
+         and CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+  </select>
+  <select id="countByCondition" resultType="java.lang.Integer" parameterType="map" >
+    select count(1)
+    from AUTH_ROLE
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="roleId !=null" >
+         and ROLE_ID = #{roleId,jdbcType=VARCHAR}
+      </if>
+      <if test ="sysId !=null" >
+         and SYS_ID = #{sysId,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleName !=null" >
+         and ROLE_NAME = #{roleName,jdbcType=VARCHAR}
+      </if>
+      <if test ="roleDesc !=null" >
+         and ROLE_DESC = #{roleDesc,jdbcType=VARCHAR}
+      </if>
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="creObj !=null" >
+         and CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ROLE_ID, SYS_ID, ROLE_NAME, ROLE_DESC, IS_USE, CRE_OBJ, CRE_TIM, UPD_OBJ, 
+    UPD_TIM
+    from AUTH_ROLE
+  </select>
+  <select id="selectAllValidRole" parameterType="java.lang.Integer" resultType="java.util.Map" >
+    select ROLE_ID as 'key', ROLE_ID as roleId, SYS_ID as sysId, ROLE_NAME as roleName, ROLE_DESC as roleDesc, 
+    		IS_USE as isUse, CRE_OBJ as creObj, CRE_TIM as creTim, UPD_OBJ as updObj, UPD_TIM as updTim
+    from AUTH_ROLE where IS_USE='1' limit #{limit}
+  </select>
+  <select id="countAllValidRole" resultType="java.lang.Integer" >
+    select count(ROLE_ID)
+    from AUTH_ROLE where IS_USE='1'
+  </select>  
+</mapper>

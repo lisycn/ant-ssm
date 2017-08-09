@@ -1,0 +1,12 @@
+[
+    {"value": "shanghai", "label": "上海", "children": [
+        {"value": "shanghaishi", "label": "上海市", "children": [
+            {"value": "pudongxinqu", "label": "浦东新区"}
+        ]}
+    ]},
+    {"value": "hubeisheng", "label": "湖北省", "children": [
+        {"value": "wuhanshi", "label": "武汉市", "children": [
+            {"value": "jianganqu", "label": "江岸区"}
+        ]}
+    ]}
+]

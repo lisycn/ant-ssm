@@ -1,0 +1,29 @@
+@timeline-prefix-cls: ant-timeline;
+.@{timeline-prefix-cls} {
+  &-item {
+    &-head {
+      &-black{
+        border-color:#000000;
+        color: #000000;
+      }
+
+      &-gray{
+        border-color:#B0B0B0;
+        color: #B0B0B0;
+      }
+
+    }
+  }
+}
+.monitorManager{
+  .ant-modal-body{
+    height: 450px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+.ellipsis{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

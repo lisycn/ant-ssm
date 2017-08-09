@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuanlai.agent.dao.NextAgentDao">
+	<resultMap type="com.yuanlai.agent.entity.AgentInf" id="AgentMap">
+		<id property="agentId" column="AGENT_ID" />
+		<result property="logonName" column="LOGON_NAME" />
+		<result property="agentDgr" column="AGENT_DGR" />
+		<result property="fathAgentId" column="FATH_AGENT_ID" />
+		<result property="firstAgentId" column="FIRST_AGENT_ID" />
+		<result property="agentName" column="AGENT_NAME" />
+		<result property="legalName" column="LEGAL_NAME" />
+		<result property="legalIdentityNo" column="LEGAL_IDENTITY_NO" />
+		<result property="licNo" column="LIC_NO" />
+		<result property="taxNo" column="TAX_NO" />
+		<result property="address" column="ADDRESS" />
+		<result property="tel" column="TEL" />
+		<result property="moblieNo" column="MOBLIE_NO" />
+		<result property="email" column="EMAIL" />
+		<result property="frozState" column="FROZ_STATE" />
+		<result property="margin" column="MARGIN" />
+		<result property="contractStrDate" column="CONTRACT_STR_DATE" />
+		<result property="contractEndDate" column="CONTRACT_END_DATE" />
+		<result property="agentStatus" column="AGE_STATUS" />
+		<result property="remark" column="REMARK" />
+		<result property="filed1" column="FILED1" />
+		<result property="filed2" column="FILED2" />
+		<result property="techcontact" column="TECHCONTACT" />
+		<result property="techtelno" column="TECHTELNO" />
+		<result property="techemail" column="TECHEMAIL" />
+		<result property="techmobno" column="TECHMOBNO" />
+		<result property="city" column="CITY" />
+		<result property="province" column="PROVINCE" />
+		<result property="bizcontact" column="BIZCONTACT" />
+		<result property="bizmobno" column="BIZMOBNO" />
+		<result property="servcontact" column="SERVCONTACT" />
+		<result property="servmobno" column="SERVMOBNO" />
+		<result property="oemState" column="OEM_STATE" />
+		<result property="slttyp" column="SLTTYP" />
+		<result property="efftim" column="EFFTIM" />
+		<result property="tiflg" column="TIFLG" />
+		<result property="bankpayacno" column="BANKPAYACNO" />
+		<result property="bankpayusernm" column="BANKPAYUSERNM" />
+		<result property="bankcode" column="BANKCODE" />
+		<result property="bankCity" column="BANK_CITY" />
+		<result property="bankProvince" column="BANK_PROVINCE" />
+		<result property="subBranch" column="SUB_BRANCH" />
+		<result property="createDate" column="CREATE_DATE" />
+		<result property="createUserId" column="CREATE_USER_ID" />
+		<result property="editDate" column="EDIT_DATE" />
+		<result property="editUserId" column="EDIT_USER_ID" />
+		<result property="agentCode" column="AGENT_CODE" />
+		<result property="fatherCode" column="FATHER_CODE" />
+		<result property="applyAgentId" column="APPLY_AGENT_ID" />
+		<result property="auditAgentid" column="AUDIT_AGENTID" />
+		<result property="profitRatio" column="PROFIT_RATIO" />
+		<result property="oemPicId" column="OEM_PIC_ID" />
+		<result property="openingLicensePicId" column="OPENING_LICENSE_PIC_ID" />
+		<result property="businessLicensePicId" column="BUSINESS_LICENSE_PIC_ID" />
+		<result property="legalIdentityPicId" column="LEGAL_IDENTITY_PIC_ID" />
+		<result property="taxNoPicId" column="TAX_NO_PIC_ID" />
+
+		<result property="rateLivelihood" column="RATE_LIVELIHOOD" />
+		<result property="rateGeneral" column="RATE_GENERAL" />
+		<result property="rateGeneralTop" column="RATE_GENERAL_TOP" />
+		<result property="rateGeneralMaximun" column="RATE_GENERAL_MAXIMUN" />
+		<result property="rateEntertain" column="RATE_ENTERTAIN" />
+		<result property="rateEntertainTop" column="RATE_ENTERTAIN_TOP" />
+		<result property="rateEntertainMaximun" column="RATE_ENTERTAIN_MAXIMUN" />
+		<result property="rateWithdrawals" column="RATE_WITHDRAWALS" />
+		<result property="rateQrCodeUser" column="RATE_QRCODE_USER" />
+		<result property="rateQrcode" column="RATE_QRCODE" />
+		
+		<result property="auditStatus" column="AUDIT_STATUS" />
+		<result property="auditFailReason" column="AUDIT_FAIL_REASON" />
+		<result property="agentType" column="AGENT_TYPE" />
+		<result property="fatherAgentName" column="FATHER_AGENT_NAME" />
+		<result property="fathAgentName" column="FATH_AGENT_NAME" />
+		<result property="firstAgentName" column="FIRST_AGENT_NAME" />
+		
+		
+		
+		<result property="payCount" column="pay_count" />
+		<result property="money" column="money" />
+		
+		<result property="merCount" column="mer_count" />
+		<result property="merIdentify" column="mer_identify" />
+		<result property="merTrueCount" column="mer_true_count" />
+		<result property="rateQuick" column="RATE_QUICK" />
+		
+	</resultMap>
+
+
+	<select id="selectList" parameterType="com.yuanlai.agent.entity.AgentInf" resultMap="AgentMap"
+		databaseId="mysql">
+		SELECT
+		A.AGENT_ID,
+		A.LOGON_NAME,
+		A.AGENT_NAME,
+		A.FATH_AGENT_ID,
+		A.FIRST_AGENT_ID,
+		A.MARGIN,
+		A.AGE_STATUS,
+		A.CREATE_DATE,
+		A.AGENT_DGR,
+		A.LEGAL_NAME,
+		A.AGENT_CODE,
+		A.OEM_STATE,
+		A.AGE_STATUS,
+		A.FROZ_STATE,
+		A.RATE_LIVELIHOOD,
+		A.RATE_GENERAL,
+		A.RATE_GENERAL_TOP,
+		A.RATE_GENERAL_MAXIMUN,
+		A.RATE_ENTERTAIN,
+		A.RATE_ENTERTAIN_TOP,
+		A.RATE_ENTERTAIN_MAXIMUN,
+		A.RATE_WITHDRAWALS,
+		A.RATE_QRCODE_USER,
+		A.RATE_QRCODE,
+		A.RATE_QUICK,
+		A.AGENT_TYPE,
+		B.AGENT_NAME AS FATH_AGENT_NAME,
+		C.AGENT_NAME AS FIRST_AGENT_NAME
+		FROM MPAMNG_AGENT_INF A
+		LEFT JOIN MPAMNG_AGENT_INF B ON A.FATH_AGENT_ID = B.AGENT_ID
+		<choose>
+			<when test="agentNameT != null and agentNameT != ''">
+				LEFT JOIN MPAMNG_AGENT_INF M4 ON M4.AGENT_NAME LIKE concat('%',#{agentNameT},'%')
+			</when>
+			<when test="logonNameT != null and logonNameT != ''">
+				LEFT JOIN MPAMNG_AGENT_INF M4 ON M4.LOGON_NAME LIKE concat('%',#{logonNameT},'%')
+			</when>
+			<otherwise>
+				LEFT JOIN MPAMNG_AGENT_INF M4 ON M4.AGENT_ID LIKE concat('%',#{agentIdT},'%')
+			</otherwise>
+		</choose>
+		<if test="agentCodeCustomer != null and agentCodeCustomer != ''">
+			and M4.AGENT_CODE LIKE CONCAT(#{agentCodeCustomer}, '%')
+		</if>
+		LEFT JOIN MPAMNG_AGENT_INF C ON A.FIRST_AGENT_ID = C.AGENT_ID
+		<where>
+			<if test="oemState != null and oemState != ''">
+				and A.OEM_STATE =#{oemState}
+			</if>
+			<if test="frozState != null and frozState != ''">
+				and A.FROZ_STATE =#{frozState}
+			</if>
+			<if test="agentId != null and agentId != ''">
+				and A.AGENT_ID LIKE CONCAT('%',#{agentId},'%')
+			</if>
+			<if test="fathAgentId != null and fathAgentId != ''">
+				and A.FATH_AGENT_ID LIKE CONCAT('%',#{fathAgentId},'%')
+			</if>
+			<if test="firstAgentId != null and firstAgentId != ''">
+				and A.FIRST_AGENT_ID LIKE CONCAT('%',#{firstAgentId},'%')
+			</if>
+			<if test="logonName != null and logonName != ''">
+				and A.LOGON_NAME LIKE CONCAT('%',#{logonName},'%')
+			</if>
+			<if test="agentName != null and agentName != ''">
+				and A.AGENT_NAME LIKE CONCAT('%',#{agentName},'%')
+			</if>
+			<if test="agentDgr != null and agentDgr != ''">
+				and A.AGENT_DGR = #{agentDgr}
+			</if>
+			<if test="legalName != null and legalName != ''">
+				and A.LEGAL_NAME LIKE CONCAT('%',#{legalName},'%')
+			</if>
+			<if test="agentCode != null and agentCode != ''">
+				and A.AGENT_CODE LIKE CONCAT(#{agentCode},'%')
+			</if>
+			<if test="agentStatus != null and agentStatus != ''">
+				and A.AGE_STATUS LIKE CONCAT(#{agentStatus},'%')
+			</if>
+			<if test="agentCodeCustomer != null and agentCodeCustomer != '' and agentIdT != 'xxxx_____xxxx'">
+				and M4.AGENT_CODE LIKE CONCAT(#{agentCodeCustomer}, '%')
+			</if>
+
+			<choose>
+				<when test="agentNameT != null and agentNameT != ''">
+					OR B.AGENT_CODE LIKE CONCAT(M4.AGENT_CODE, '%')
+				</when>
+				<when test="logonNameT != null and logonNameT != ''">
+					OR B.AGENT_CODE LIKE CONCAT(M4.AGENT_CODE, '%')
+				</when>
+				<when test="agentIdT != 'xxxx_____xxxx'">
+					OR B.AGENT_CODE LIKE CONCAT(M4.AGENT_CODE, '%')
+				</when>
+				<otherwise>
+				</otherwise>
+			</choose>
+
+			<if test="((agentIdT != 'xxxx_____xxxx') or (agentNameT != null and agentNameT != '') or ( logonNameT != null and logonNameT != '')) and agentStatus != null and agentStatus != ''">
+				AND A.AGE_STATUS = #{agentStatus}
+			</if>
+
+			<if test="((agentIdT != 'xxxx_____xxxx') or (agentNameT != null and agentNameT != '') or ( logonNameT != null and logonNameT != '')) and frozState != null and frozState != ''">
+				AND A.FROZ_STATE = #{frozState}
+			</if>
+		</where>
+		WHERE
+		A.AGENT_CODE LIKE CONCAT((SELECT AGENT_CODE FROM MPAMNG_AGENT_INF WHERE
+		AGENT_ID=#{agentId}),'%')
+		ORDER BY A.AGENT_ID DESC
+	   </select>
+
+
+
+	
+</mapper>

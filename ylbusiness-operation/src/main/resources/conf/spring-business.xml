@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:context="http://www.springframework.org/schema/context"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+    
+	<!-- 扫描文件(自动注入) -->
+	<context:component-scan base-package="com.yuanlai.agent" />
+    <!-- 序号服务 start(可配置多个) -->
+    <bean id="authLogNoService" class="com.tangdi.def.base.seq.TdSequenceService">
+        <property name="step" value="100"/> <!-- 每次取step个序号到内存,默认50,如果交易并发特别大建议设成1000 -->
+        <property name="dateCutoff" value="true"/> <!-- 日切后,序号重置为0 -->
+        <property name="type" value="LogNo"/> <!-- 主键,按该值从表中取对应的序号 -->
+        <property name="format" value="{yyMMdd}{######}"/> <!-- 序号格式,支持日期和序号长度设置,{}之外的默认不变 -->
+        <property name="table" ref="idTable"/> <!-- spring-mybatis.xml中声明 -->
+    </bean>
+        <bean id="operationConfig" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>file:/home/mobpay/mpapp/operation.properties</value>
+            </list>
+        </property>
+    </bean>
+</beans>

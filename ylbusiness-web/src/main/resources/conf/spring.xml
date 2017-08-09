@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:context="http://www.springframework.org/schema/context"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:aop="http://www.springframework.org/schema/aop"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+      http://www.springframework.org/schema/aop   
+      http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+    
+	<!-- aop支持 -->
+	<aop:aspectj-autoproxy />
+	
+	<!-- 加载配置属性文件 -->
+    <!-- <context:property-placeholder location="classpath:conf/*.properties" ignore-unresolvable="true" /> -->
+    <bean id="propertyPlaceholder" class="com.tangdi.def.utils.component.TdPropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:conf/jdbc.properties</value>
+				<value>classpath:conf/sysconfig.properties</value>
+			</list>
+		</property>
+	</bean>
+    
+	<!-- 扫描文件（自动注入） -->
+	<context:component-scan base-package="com.tangdi.def.comm"/>
+	
+	<!-- <bean id="sysConfigProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">  
+        <property name="locations">
+            <list>
+                <value>classpath:conf/sysconfig.properties</value> 
+                <value>classpath:conf/errmsg.properties</value> 
+            </list>
+        </property>
+    </bean> -->
+    
+    <!-- spring系统启动以后，优先加载该类，不能直接放在td-utils的工程spring.xml里，因为这个服务要优先加载 -->
+	<bean id="SpringContext" class="com.tangdi.tdcomm.ext.utils.SpringContext" lazy-init="false" />
+    
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="useCodeAsDefaultMessage" value="true" />
+        <property name="cacheSeconds" value="10" />
+        <property name="basenames">
+            <list>
+                <value>classpath:conf/message/message</value>
+            </list>
+        </property>
+	</bean>
+</beans>

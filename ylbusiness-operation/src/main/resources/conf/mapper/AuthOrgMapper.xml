@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuanlai.agent.dao.AuthOrgDao" >
+  <resultMap id="BaseResultMap" type="com.yuanlai.agent.entity.AuthOrg" >
+    <id column="ORG_ID" property="orgId" jdbcType="VARCHAR" />
+    <result column="PARENT_ORG_ID" property="parentOrgId" jdbcType="VARCHAR" />
+    <result column="ORG_NAME" property="orgName" jdbcType="VARCHAR" />
+    <result column="ORG_DESC" property="orgDesc" jdbcType="VARCHAR" />
+    <result column="IS_USE" property="isUse" jdbcType="CHAR" />
+    <result column="CRE_OBJ" property="creObj" jdbcType="VARCHAR" />
+    <result column="CRE_TIM" property="creTim" jdbcType="CHAR" />
+    <result column="UPD_OBJ" property="updObj" jdbcType="VARCHAR" />
+    <result column="UPD_TIM" property="updTim" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ORG_ID, PARENT_ORG_ID, ORG_NAME, ORG_DESC,IS_USE, CRE_OBJ, CRE_TIM, UPD_OBJ, UPD_TIM
+  </sql>
+  <sql id="Base_Column_List_Special" >
+  ORG_ID as 'key',ORG_ID as orgId,ORG_ID as value,PARENT_ORG_ID as parentOrgId, ORG_NAME as orgName, ORG_NAME as label,ORG_DESC as orgDesc, 
+   IS_USE as isUse, CRE_OBJ as creObj, CRE_TIM as creTim, UPD_OBJ as updObj, UPD_TIM as updTim
+  </sql>
+
+  <update id="disOrEnable" parameterType="java.lang.String" >
+    update AUTH_ORG set IS_USE=#{0},UPD_OBJ=#{2},UPD_TIM=#{3} where ORG_ID=#{1}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from AUTH_ORG
+    where ORG_ID = #{orgId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from AUTH_ORG
+    where ORG_ID = #{orgId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yuanlai.agent.entity.AuthOrg" >
+    insert into AUTH_ORG (ORG_ID, PARENT_ORG_ID, ORG_NAME, 
+      ORG_DESC, IS_USE, CRE_OBJ, 
+      CRE_TIM, UPD_OBJ, UPD_TIM)
+    values (#{orgId,jdbcType=VARCHAR}, #{parentOrgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
+      #{orgDesc,jdbcType=VARCHAR}, 
+      #{isUse,jdbcType=CHAR}, #{creObj,jdbcType=VARCHAR}, 
+      #{creTim,jdbcType=CHAR}, #{updObj,jdbcType=VARCHAR}, #{updTim,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yuanlai.agent.entity.AuthOrg" >
+    insert into AUTH_ORG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orgId != null" >
+        ORG_ID,
+      </if>
+      <if test="parentOrgId != null" >
+        PARENT_ORG_ID,
+      </if>
+      <if test="orgName != null" >
+        ORG_NAME,
+      </if>
+      <if test="orgDesc != null" >
+        ORG_DESC,
+      </if>
+      <if test="isUse != null" >
+        IS_USE,
+      </if>
+      <if test="creObj != null" >
+        CRE_OBJ,
+      </if>
+      <if test="creTim != null" >
+        CRE_TIM,
+      </if>
+      <if test="updObj != null" >
+        UPD_OBJ,
+      </if>
+      <if test="updTim != null" >
+        UPD_TIM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orgId != null" >
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentOrgId != null" >
+        #{parentOrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgDesc != null" >
+        #{orgDesc,jdbcType=VARCHAR},
+      </if>
+ 
+      <if test="isUse != null" >
+        #{isUse,jdbcType=CHAR},
+      </if>
+      <if test="creObj != null" >
+        #{creObj,jdbcType=VARCHAR},
+      </if>
+      <if test="creTim != null" >
+        #{creTim,jdbcType=CHAR},
+      </if>
+      <if test="updObj != null" >
+        #{updObj,jdbcType=VARCHAR},
+      </if>
+      <if test="updTim != null" >
+        #{updTim,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yuanlai.agent.entity.AuthOrg" >
+    update AUTH_ORG
+    <set >
+      <if test="parentOrgId != null" >
+        PARENT_ORG_ID = #{parentOrgId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null" >
+        ORG_NAME = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgDesc != null" >
+        ORG_DESC = #{orgDesc,jdbcType=VARCHAR},
+      </if>
+   
+   
+      <if test="isUse != null" >
+        IS_USE = #{isUse,jdbcType=CHAR},
+      </if>
+      <if test="creObj != null" >
+        CRE_OBJ = #{creObj,jdbcType=VARCHAR},
+      </if>
+      <if test="creTim != null" >
+        CRE_TIM = #{creTim,jdbcType=CHAR},
+      </if>
+      <if test="updObj != null" >
+        UPD_OBJ = #{updObj,jdbcType=VARCHAR},
+      </if>
+      <if test="updTim != null" >
+        UPD_TIM = #{updTim,jdbcType=CHAR},
+      </if>
+    </set>
+    where ORG_ID = #{orgId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yuanlai.agent.entity.AuthOrg" >
+    update AUTH_ORG
+    set PARENT_ORG_ID = #{parentOrgId,jdbcType=VARCHAR},
+      ORG_NAME = #{orgName,jdbcType=VARCHAR},
+      ORG_DESC = #{orgDesc,jdbcType=VARCHAR},
+      IS_USE = #{isUse,jdbcType=CHAR},
+      CRE_OBJ = #{creObj,jdbcType=VARCHAR},
+      CRE_TIM = #{creTim,jdbcType=CHAR},
+      UPD_OBJ = #{updObj,jdbcType=VARCHAR},
+      UPD_TIM = #{updTim,jdbcType=CHAR}
+    where ORG_ID = #{orgId,jdbcType=VARCHAR}
+  </update>
+  <sql id="pageHeader" >
+    <choose >
+      <when test="_databaseId == 'mysql'" />
+      <otherwise >
+        <if test="start != null and end != null" >
+          select * from (select a.*, rownum rn from (
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+  <sql id="pageFooter" >
+    <choose >
+      <when test="_databaseId == 'mysql'" >
+        <if test="start != null and limit != null" >
+          limit ${start}, ${limit}
+        </if>
+      </when>
+      <otherwise >
+        <if test="start != null and end != null" >
+          ) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+        </if>
+      </otherwise>
+    </choose>
+  </sql>
+  <select id="selectByPager" resultType="map" parameterType="map" >
+    <include refid="pageHeader" />
+    select ORG_ID as orgId, PARENT_ORG_ID as parentOrgId, ORG_NAME as orgName, ORG_DESC as orgDesc, 
+    	IS_USE as isUse, CRE_OBJ as creObj, CRE_TIM as creTim, UPD_OBJ as updObj, UPD_TIM as updTim
+     from AUTH_ORG
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="orgId !=null" >
+         and ORG_ID = #{orgId,jdbcType=VARCHAR}
+      </if>
+      <if test ="parentOrgId !=null" >
+         and PARENT_ORG_ID = #{parentOrgId,jdbcType=VARCHAR}
+      </if>
+      <if test ="orgName !=null" >
+         and ORG_NAME = #{orgName,jdbcType=VARCHAR}
+      </if>
+      <if test ="orgDesc !=null" >
+         and ORG_DESC = #{orgDesc,jdbcType=VARCHAR}
+      </if>
+   
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="creObj !=null" >
+         and CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+    <include refid="pageFooter" />
+  </select>
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+     from AUTH_ORG
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="orgId !=null" >
+         and ORG_ID = #{orgId,jdbcType=VARCHAR}
+      </if>
+      <if test ="parentOrgId !=null" >
+         and PARENT_ORG_ID = #{parentOrgId,jdbcType=VARCHAR}
+      </if>
+      <if test ="orgName !=null" >
+         and ORG_NAME = #{orgName,jdbcType=VARCHAR}
+      </if>
+      <if test ="orgDesc !=null" >
+         and ORG_DESC = #{orgDesc,jdbcType=VARCHAR}
+      </if>
+
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="creObj !=null" >
+         and CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+  </select>
+  <select id="countByCondition" resultType="java.lang.Integer" parameterType="map" >
+    select count(1)
+     from AUTH_ORG
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="orgId !=null" >
+         and ORG_ID = #{orgId,jdbcType=VARCHAR}
+      </if>
+      <if test ="parentOrgId !=null" >
+         and PARENT_ORG_ID = #{parentOrgId,jdbcType=VARCHAR}
+      </if>
+      <if test ="orgName !=null" >
+         and ORG_NAME = #{orgName,jdbcType=VARCHAR}
+      </if>
+      <if test ="orgDesc !=null" >
+         and ORG_DESC = #{orgDesc,jdbcType=VARCHAR}
+      </if>
+
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=CHAR}
+      </if>
+      <if test ="creObj !=null" >
+         and CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="creTim !=null" >
+         and CRE_TIM = #{creTim,jdbcType=CHAR}
+      </if>
+      <if test ="updObj !=null" >
+         and UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+      </if>
+      <if test ="updTim !=null" >
+         and UPD_TIM = #{updTim,jdbcType=CHAR}
+      </if>
+    </trim>
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select ORG_ID, PARENT_ORG_ID, ORG_NAME, ORG_DESC,IS_USE, CRE_OBJ, CRE_TIM, UPD_OBJ, 
+    UPD_TIM
+    from AUTH_ORG
+  </select>
+  
+  <select id="selectByParentOrgId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select <include refid="Base_Column_List" />
+    from AUTH_ORG
+    where PARENT_ORG_ID = #{parentOrgId,jdbcType=VARCHAR}
+  </select>  
+  <select id="selectOrgTreeForTable_parent" resultType="java.util.Map" parameterType="java.util.Map">
+    select <include refid="Base_Column_List_Special" />
+    from AUTH_ORG
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="parentOrgId != null" >
+         and PARENT_ORG_ID = #{parentOrgId,jdbcType=VARCHAR}
+      </if>
+      <if test ="orgId != null" >
+          and ORG_ID = #{orgId,jdbcType=VARCHAR}
+      </if>
+      <if test ="orgName !=null" >
+         and ORG_NAME like CONCAT('%',#{orgName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=VARCHAR}
+      </if>     
+    </trim>
+  </select>
+  <select id="countOrgTreeForTable_child" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(ORG_ID)
+    from AUTH_ORG
+  </select>   
+  <select id="selectOrgTreeForTable_child" resultType="java.util.Map" parameterType="java.util.Map">
+    select <include refid="Base_Column_List_Special" />
+    from AUTH_ORG
+    <trim prefix="WHERE" prefixOverrides="AND" >
+      <if test ="isUse !=null" >
+         and IS_USE = #{isUse,jdbcType=VARCHAR}
+      </if>     
+    </trim>
+    limit #{limit}
+  </select>
+  <select id="selectRepeatForAdd" resultMap="BaseResultMap" parameterType="com.yuanlai.agent.entity.AuthOrg">
+    select <include refid="Base_Column_List_Special" />
+    from AUTH_ORG 
+    where ORG_ID = #{orgId,jdbcType=VARCHAR} or ORG_NAME = #{orgName,jdbcType=VARCHAR}
+  </select>
+  <select id="selectRepeatForUpdate" resultMap="BaseResultMap" parameterType="com.yuanlai.agent.entity.AuthOrg">
+    select <include refid="Base_Column_List_Special" />
+    from AUTH_ORG 
+    where ORG_ID != #{orgId,jdbcType=VARCHAR} and ORG_NAME = #{orgName,jdbcType=VARCHAR}
+  </select>
+</mapper>

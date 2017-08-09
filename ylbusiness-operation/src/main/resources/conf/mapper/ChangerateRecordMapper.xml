@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuanlai.agent.dao.ChangerateRecordDao">
+	<resultMap type="com.yuanlai.agent.entity.ChangerageRecord" id="changerateRecordMap">
+		<id property="changerateid" column="changerateid" />
+		<result property="account" column="account" />
+		<result property="password" column="password" />
+		<result property="wxRate" column="wx_rate" />
+		<result property="aliRate" column="ali_rate" />
+		<result property="channelCode" column="channel_code" />
+		<result property="privatekey" column="privatekey" />
+		<result property="respcode" column="respcode" />
+		<result property="respinfo" column="respinfo" />
+		<result property="channel" column="channel" />
+		<result property="accesspart" column="accesspart" />
+		<result property="createtime" column="createtime" />
+
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		changerateid, account, password, wx_rate as 'wxRate', ali_rate as 'aliRate', channel_code as 'channelCode', privatekey, respcode, respinfo, channel, accesspart, createtime
+	</sql>
+
+	<sql id="pageHeader">
+		<choose>
+			<when test="_databaseId == 'mysql'"/>
+			<otherwise>
+				<if test="start != null and end != null">
+					select * from (select a.*, rownum rn from (
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<sql id="pageFooter">
+		<choose>
+			<when test="_databaseId == 'mysql'">
+				<if test="start != null and limit != null">
+					limit ${start}, ${limit}
+				</if>
+			</when>
+			<otherwise>
+				<if test="start != null and end != null">
+					) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+
+
+	<select id="selectByPager" parameterType="java.util.Map" resultType="java.util.Map">
+		<include refid="pageHeader"/>
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM
+		changerate_record
+		<where>
+			<if test="account != null and account != ''">
+				AND account LIKE  CONCAT('%', #{account} ,'%')
+			</if>
+			<if test="channel != null and channel != ''">
+				AND channel LIKE CONCAT('%', #{channel} ,'%')
+			</if>
+			<if test="accesspart != null and accesspart != '' and accesspartRole == 'RootOrg' ">
+				AND accesspart = #{accesspart}
+			</if>
+			<if test="accesspartRole != null and accesspartRole != '' and accesspartRole != 'RootOrg'">
+				AND accesspart = #{accesspartRole}
+			</if>
+
+		</where>
+		order by createtime desc
+		<include refid="pageFooter"/>
+	</select>
+
+
+	<select id="countByCondition" resultType="java.lang.Integer" parameterType="map">
+		select count(1)
+		from changerate_record
+		<where>
+			<if test="account != null and account != ''">
+				AND account LIKE  CONCAT('%', #{account} ,'%')
+			</if>
+			<if test="channel != null and channel != ''">
+				AND channel LIKE CONCAT('%', #{channel} ,'%')
+			</if>
+			<if test="accesspart != null and accesspart != '' and accesspartRole == 'RootOrg' ">
+				AND accesspart = #{accesspart}
+			</if>
+			<if test="accesspartRole != null and accesspartRole != '' and accesspartRole != 'RootOrg'">
+				AND accesspart = #{accesspartRole}
+			</if>
+		</where>
+	</select>
+
+</mapper>

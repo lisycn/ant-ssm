@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuanlai.agent.dao.ValidcardRecordDao" >
+  <resultMap id="validcardRecordMap" type="com.yuanlai.agent.entity.ValidcardRecord" >
+    <id column="validcardid" property="validcardid" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="realname" property="realname" jdbcType="VARCHAR" />
+    <result column="merchantname" property="merchantname" jdbcType="VARCHAR" />
+    <result column="cmersort" property="cmersort" jdbcType="VARCHAR" />
+    <result column="mccid" property="mccid" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="backcardnumber" property="backcardnumber" jdbcType="VARCHAR" />
+    <result column="idcardnumber" property="idcardnumber" jdbcType="VARCHAR" />
+    <result column="reservephone" property="reservephone" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="privatekey" property="privatekey" jdbcType="VARCHAR" />
+    <result column="respinfo" property="respinfo" jdbcType="VARCHAR" />
+    <result column="respcode" property="respcode" jdbcType="VARCHAR" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
+    <result column="accesspart" property="accesspart" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+
+	<sql id="Base_Column_List">
+		validcardid, account, realname, merchantname, cmersort, mccid, phone, backcardnumber, idcardnumber, reservephone, location, privatekey, respinfo, respcode, channel, accesspart, createtime
+	</sql>
+
+	<sql id="pageHeader">
+		<choose>
+			<when test="_databaseId == 'mysql'"/>
+			<otherwise>
+				<if test="start != null and end != null">
+					select * from (select a.*, rownum rn from (
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<sql id="pageFooter">
+		<choose>
+			<when test="_databaseId == 'mysql'">
+				<if test="start != null and limit != null">
+					limit ${start}, ${limit}
+				</if>
+			</when>
+			<otherwise>
+				<if test="start != null and end != null">
+					) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+
+
+	<select id="selectByPager" parameterType="java.util.Map" resultType="java.util.Map">
+		<include refid="pageHeader"/>
+		SELECT
+		<include refid="Base_Column_List"/>
+		FROM
+		validcard_record
+
+		<where>
+			<if test="account != null and account != ''">
+				AND account LIKE  CONCAT('%', #{account} ,'%')
+			</if>
+			<if test="realname != null and realname != ''">
+				AND realname LIKE CONCAT('%', #{realname} ,'%')
+			</if>
+			<if test="merchantname != null and merchantname != ''">
+				AND merchantname LIKE CONCAT('%', #{merchantname} ,'%')
+			</if>
+			<if test="accesspart != null and accesspart != '' and accesspartRole == 'RootOrg' ">
+				AND accesspart = #{accesspart}
+			</if>
+			<if test="accesspartRole != null and accesspartRole != '' and accesspartRole != 'RootOrg'">
+				AND accesspart = #{accesspartRole}
+			</if>
+		</where>
+		order by createtime desc
+		<include refid="pageFooter"/>
+	</select>
+
+
+	<select id="countByCondition" resultType="java.lang.Integer" parameterType="map">
+		select count(1)
+		FROM
+		validcard_record
+		<where>
+			<if test="account != null and account != ''">
+				AND account LIKE  CONCAT('%', #{account} ,'%')
+			</if>
+			<if test="realname != null and realname != ''">
+				AND realname LIKE CONCAT('%', #{realname} ,'%')
+			</if>
+			<if test="merchantname != null and merchantname != ''">
+				AND merchantname LIKE CONCAT('%', #{merchantname} ,'%')
+			</if>
+			<if test="accesspart != null and accesspart != '' and accesspartRole == 'RootOrg' ">
+				AND accesspart = #{accesspart}
+			</if>
+			<if test="accesspartRole != null and accesspartRole != '' and accesspartRole != 'RootOrg'">
+				AND accesspart = #{accesspartRole}
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuanlai.agent.dao.UserInfoRecordDao" >
+  <resultMap id="UserInfoRecordMap" type="com.yuanlai.agent.entity.UserInfo" >
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+	<sql id="pageHeader">
+		<choose>
+			<when test="_databaseId == 'mysql'"/>
+			<otherwise>
+				<if test="start != null and end != null">
+					select * from (select a.*, rownum rn from (
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+	<sql id="pageFooter">
+		<choose>
+			<when test="_databaseId == 'mysql'">
+				<if test="start != null and limit != null">
+					limit ${start}, ${limit}
+				</if>
+			</when>
+			<otherwise>
+				<if test="start != null and end != null">
+					) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+				</if>
+			</otherwise>
+		</choose>
+	</sql>
+
+
+
+	<select id="selectByPager" parameterType="java.util.Map" resultType="java.util.Map">
+		<include refid="pageHeader"/>
+		SELECT
+			account,mobile
+		FROM
+		userinfo
+
+		<where>
+			<if test="account != null and account != ''">
+				AND account = #{account}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND mobile = #{mobile}
+			</if>
+		</where>
+		order by createtime desc
+		<include refid="pageFooter"/>
+	</select>
+
+
+	<select id="countByCondition" resultType="java.lang.Integer" parameterType="map">
+		select count(1)
+		FROM
+		userinfo
+		<where>
+			<if test="account != null and account != ''">
+				AND account = #{account}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND mobile = #{mobile}
+			</if>
+		</where>
+	</select>
+</mapper>

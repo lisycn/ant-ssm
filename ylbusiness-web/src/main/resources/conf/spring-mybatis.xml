@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+
+
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${jdbc_driverClassName}" />
+		<property name="url" value="${jdbc_url}" />
+		<property name="username" value="${jdbc_username}" />
+		<property name="password" value="${jdbc_password}" />
+		
+		<!-- 连接池最大使用连接数 -->
+		<property name="maxActive" value="${jdbc_maxActive}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="${jdbc_initialSize}" />
+		<!-- 获取连接最大等待时间(毫秒) -->
+		<property name="maxWait" value="${jdbc_maxWait}" />
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${jdbc_minIdle}" />
+		<!-- 自动清除无用连接 -->
+		<property name="removeAbandoned" value="${jdbc_removeAbandoned}" />
+		<!-- 清除无用连接的等待时间(秒) -->
+		<property name="removeAbandonedTimeout" value="${jdbc_removeAbandonedTimeout}" />
+		<!-- 自动回收无用连接时打印错误信息 -->
+		<property name="logAbandoned" value="${jdbc_logAbandoned}" />
+		<!-- 连接属性 -->
+		<property name="connectionProperties" value="${jdbc_connectionProperties}" />
+		<!-- 合并多个DruidDataSource的监控数据 -->
+		<property name="useGlobalDataSourceStat" value="${jdbc_useGlobalDataSourceStat}" />
+		
+		<property name="filters" value="log4j" />
+		<property name="proxyFilters">
+			<list>
+				<ref bean="stat-filter" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 通过proxyFilters属性配置 -->
+	<bean name="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+		<property name="slowSqlMillis" value="10000" />
+		<property name="logSlowSql" value="true" />
+		<property name="mergeSql" value="true" />
+	</bean>
+	
+	<!-- 对数据源进行事务管理 -->
+	<bean name="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource">
+		<qualifier value="tdweb_manager" />
+	</bean>
+
+	<!-- 使用annotation定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+
+	<!-- 多数据库别名识别 -->
+	<bean name="vendorProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="properties">
+			<props>
+				<prop key="SQL Server">sqlserver</prop>
+				<prop key="DB2">db2</prop>
+				<prop key="Oracle">oracle</prop>
+				<prop key="MySQL">mysql</prop>
+				<prop key="H2">h2</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean name="dbProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+		<property name="properties" ref="vendorProperties" />
+	</bean>
+
+	 <bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:dataSource-ref="dataSource" p:databaseIdProvider-ref="dbProvider"
+		p:configLocation="classpath:conf/mybatis-configuration.xml"
+		p:mapperLocations="classpath*:conf/mapper/*.xml" />
+
+	<!-- 自动扫描DAO -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.yuanlai.agent.dao" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean> 
+
+	<!-- 序号表 -->
+	<bean id="idTable" class="com.tangdi.def.base.seq.SequenceTable">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+</beans>

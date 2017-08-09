@@ -1,0 +1,362 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	min-width: 480px;
+	padding: 0;
+	margin: 0;
+}
+
+.loading {
+	position: fixed;
+	width: 100%;
+	top: 40%;
+	text-align: center;
+	span {
+		padding-left: 32px;
+		font-size: 12px;
+		font-weight: bold;
+	}
+	.cssload-container {
+		display: block;
+		margin: 16px auto;
+		width: 138px;
+	}
+	.cssload-loading i {
+		width: 28px;
+		height: 28px;
+		display: inline-block;
+		border-radius: 50%;
+		background: rgb(0, 179, 213);
+	}
+	.cssload-loading i:first-child {
+		opacity: 0;
+		animation: cssload-loading-ani2 0.58s linear infinite;
+		-o-animation: cssload-loading-ani2 0.58s linear infinite;
+		-ms-animation: cssload-loading-ani2 0.58s linear infinite;
+		-webkit-animation: cssload-loading-ani2 0.58s linear infinite;
+		-moz-animation: cssload-loading-ani2 0.58s linear infinite;
+		transform: translate(-28px);
+		-o-transform: translate(-28px);
+		-ms-transform: translate(-28px);
+		-webkit-transform: translate(-28px);
+		-moz-transform: translate(-28px);
+	}
+	.cssload-loading i:nth-child(2), .cssload-loading i:nth-child(3) {
+		animation: cssload-loading-ani3 0.58s linear infinite;
+		-o-animation: cssload-loading-ani3 0.58s linear infinite;
+		-ms-animation: cssload-loading-ani3 0.58s linear infinite;
+		-webkit-animation: cssload-loading-ani3 0.58s linear infinite;
+		-moz-animation: cssload-loading-ani3 0.58s linear infinite;
+	}
+	.cssload-loading i:last-child {
+		animation: cssload-loading-ani1 0.58s linear infinite;
+		-o-animation: cssload-loading-ani1 0.58s linear infinite;
+		-ms-animation: cssload-loading-ani1 0.58s linear infinite;
+		-webkit-animation: cssload-loading-ani1 0.58s linear infinite;
+		-moz-animation: cssload-loading-ani1 0.58s linear infinite;
+	}
+	@keyframes cssload-loading-ani1 {
+		100% {
+			transform: translate(55px);
+			opacity: 0;
+		}
+	}
+	@-o-keyframes cssload-loading-ani1 {
+		100% {
+			-o-transform: translate(55px);
+			opacity: 0;
+		}
+	}
+	@-ms-keyframes cssload-loading-ani1 {
+		100% {
+			-ms-transform: translate(55px);
+			opacity: 0;
+		}
+	}
+	@-webkit-keyframes cssload-loading-ani1 {
+		100% {
+			-webkit-transform: translate(55px);
+			opacity: 0;
+		}
+	}
+	@-moz-keyframes cssload-loading-ani1 {
+		100% {
+			-moz-transform: translate(55px);
+			opacity: 0;
+		}
+	}
+	@keyframes cssload-loading-ani2 {
+		100% {
+			transform: translate(28px);
+			opacity: 1;
+		}
+	}
+	@-o-keyframes cssload-loading-ani2 {
+		100% {
+			-o-transform: translate(28px);
+			opacity: 1;
+		}
+	}
+	@-ms-keyframes cssload-loading-ani2 {
+		100% {
+			-ms-transform: translate(28px);
+			opacity: 1;
+		}
+	}
+	@-webkit-keyframes cssload-loading-ani2 {
+		100% {
+			-webkit-transform: translate(28px);
+			opacity: 1;
+		}
+	}
+	@-moz-keyframes cssload-loading-ani2 {
+		100% {
+			-moz-transform: translate(28px);
+			opacity: 1;
+		}
+	}
+	@keyframes cssload-loading-ani3 {
+		100% {
+			transform: translate(28px);
+		}
+	}
+	@-o-keyframes cssload-loading-ani3 {
+		100% {
+			-o-transform: translate(28px);
+		}
+	}
+	@-ms-keyframes cssload-loading-ani3 {
+		100% {
+			-ms-transform: translate(28px);
+		}
+	}
+	@-webkit-keyframes cssload-loading-ani3 {
+		100% {
+			-webkit-transform: translate(28px);
+		}
+	}
+	@-moz-keyframes cssload-loading-ani3 {
+		100% {
+			-moz-transform: translate(28px);
+		}
+	}
+}
+
+.app {
+	width: 100%;
+	height: 100%;
+}
+
+h2 {
+	line-height: 1;
+}
+
+p.br {
+	display: block;
+	line-height: 16px;
+	padding: 8px;
+}
+
+p.small {
+	padding-bottom: 4px;
+}
+
+p.middle {
+	padding-bottom: 8px;
+}
+
+p.large {
+	padding-bottom: 16px;
+}
+
+hr {
+	height: 1px;
+	border: none;
+	border-top: 1px dashed #e9e9e9;
+	margin: 16px 0;
+	padding: 0;
+}
+
+table.detail_table {
+	font-size: 12px;
+	td {
+		padding: 4px 8px;
+		min-width: 80px;
+		span.detail_table_label {
+			font-size: 13px;
+			font-weight: bold;
+		}
+	}
+}
+
+.overflow-text {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.bank {
+	height: 28px;
+	background-image: url(./image/banks.png);
+	background-repeat: no-repeat;
+}
+
+//中国农业银行
+.bank-abc, .bank-01030000 {
+	background-position: -3px -3px;
+}
+
+//北京银行
+.bank-bob, .bank-04031000 {
+	background-position: -3px -40px;
+}
+
+//北京农村商业银行
+.bank-bjrcb, .bank-14181000 {
+	background-position: -3px -75px;
+}
+
+//中国银行
+.bank-boc, .bank-01040000 {
+	background-position: -3px -112px;
+}
+
+//中国建设银行
+.bank-ccb, .bank-01050000 {
+	background-position: -3px -148px;
+}
+
+//成都银行
+.bank-bocd {
+	background-position: -3px -183px;
+}
+
+//中国光大银行
+.bank-ceb, .bank-03030000 {
+	background-position: -3px -219px;
+}
+
+//兴业银行
+.bank-cib, .bank-03090000 {
+	background-position: -3px -256px;
+}
+
+//中信银行
+.bank-cncb, .bank-03020000 {
+	background-position: -3px -292px;
+}
+
+//招商银行
+.bank-cmb, .bank-03080000 {
+	background-position: -3px -327px;
+}
+
+//中国民生银行
+.bank-cmbc, .bank-03050000 {
+	background-position: -3px -364px;
+}
+
+//交通银行
+.bank-bocom, .bank-03010000 {
+	background-position: -3px -400px;
+}
+
+//常熟农商银行 
+.bank-csrcb {
+	background-position: -3px -435px;
+}
+
+//富滇银行
+.bank-fdb {
+	background-position: -3px -471px;
+}
+
+//广发银行
+.bank-cgb, .bank-03060000 {
+	background-position: 0px -508px;
+}
+
+//杭州银行
+.bank-hzcb {
+	background-position: -3px -544px;
+}
+
+//中国工商银行
+.bank-icbc, .bank-01020000 {
+	background-position: -3px -580px;
+}
+
+//宁波银行
+.bank-nbcb, .bank-04083320 {
+	background-position: -3px -616px;
+}
+
+//南京银行
+.bank-njcb, .bank-04243010 {
+	background-position: -3px -652px;
+}
+
+//中国邮政储蓄银行
+.bank-psbc, .bank-01000000 {
+	background-position: -3px -686px;
+}
+
+//上海银行
+.bank-bosh, .bank-04010000 {
+	background-position: -3px -724px;
+}
+
+//上海农村商业银行
+.bank-srcb {
+	background-position: -3px -761px;
+}
+
+//平安银行
+.bank-pab {
+	background-position: -3px -796px;
+}
+
+//浦发银行
+.bank-spdb, .bank-03100000 {
+	background-position: -3px -832px;
+}
+
+//温州银行
+.bank-wzcb, .bank-04123330 {
+	background-position: -3px -868px;
+}
+
+//浙江农信
+.bank-zjrcb {
+	background-position: -3px -904px;
+}
+
+//antd组件扩展样式
+//Popover的无内补丁样式，添加至Popover的overlayClassName属性中，添加后content中无内补丁
+.popover-no-padding {
+	.ant-popover-inner-content {
+		padding: 0;
+	}
+}
+
+//antd组件补丁
+//定制高级查询表单样式(antd version > 0.12.14)
+.advanced-search-form {
+	padding: 16px 8px;
+	background: #f8f8f8;
+	border: 1px solid #d9d9d9;
+	border-radius: 6px;
+	//调整表单元素外下补丁高度
+	.ant-form-item {
+		margin-bottom: 8px !important;
+	}
+	.ant-btn {
+		margin-left: 8px !important;
+	}
+}
+
+.compact-form {
+	.ant-form-item {
+		margin-bottom: 16px;
+	}
+}

@@ -1,0 +1,3 @@
+{"rspData":{"total":1,"list":[{"modelno":1,"modelname":"模板名称1","systemno":"10001","systemname":"业务系统名称1",
+"status":0,"modeltype":"01","createdate":"2016-05-21"},{"modelno":2,"modelname":"模板名称2","systemno":"10002","systemname":"业务系统名称2",
+"status":1,"modeltype":"02","createdate":"2016-05-22"}]},"rspMsg":"交易成功","rspCod":"000000"}

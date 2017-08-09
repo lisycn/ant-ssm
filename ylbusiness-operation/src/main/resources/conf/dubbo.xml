@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+	
+	<!-- 提供服务 -->
+	<!-- <dubbo:service interface="com.tangdi.tddef.auth.service.AuthRoleService" ref="authRoleServiceImpl" />
+	 -->
+	<!-- 调用服务 -->
+	<!-- dubbo默认调用服务失败时会 重发两次，因此耗时长的交易需要设置timeout参数；
+		 如果设置cluster="failfast"，交易失败后不会重发，保证交易只执行一次 -->
+	<!-- <dubbo:reference id="testAuthRoleService" interface="com.tangdi.tddef.auth.service.AuthRoleService" timeout="60000" cluster="failfast" check="false"/> -->
+</beans>

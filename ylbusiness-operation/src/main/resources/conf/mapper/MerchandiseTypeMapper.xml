@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuanlai.agent.dao.MerchandiseTypeDao">
+	<resultMap type="com.yuanlai.agent.entity.MerchandiseTypeInf" id="MerchandiseTypeMap">
+		    <result property="merchandiseId"               column="MERCHANDISE_TYPE_ID" /> 
+		     <result property="merchandiseType"               column="MERCHANDISE_TYPE_NAME" /> 
+		      <result property="businessId"               column="BUSINESS_ID" /> 
+	</resultMap>
+
+
+	<select id="selectList" parameterType="com.yuanlai.agent.entity.MerchandiseTypeInf" resultMap="MerchandiseTypeMap" databaseId="mysql">
+		SELECT 
+		         MERCHANDISE_TYPE_ID, 
+		         MERCHANDISE_TYPE_NAME
+		FROM  
+		       MERCHANDISE_TYPE_INF
+		<where>
+		        1=1
+		        <if test="merchandiseId!= null and merchandiseId !=''">
+						AND MERCHANDISE_TYPE_ID =  #{merchandiseId}
+				</if>
+		        <if test="merchandiseType!= null and merchandiseType!= ''">
+						AND MERCHANDISE_TYPE_NAME LIKE CONCAT('%',#{merchandiseType},'%')
+				</if>
+						AND BUSINESS_ID = #{businessId}
+				
+		</where>
+		ORDER BY MERCHANDISE_TYPE_ID  DESC
+	</select>
+	<insert id="insertEntity" parameterType="com.yuanlai.agent.entity.MerchandiseTypeInf">
+		INSERT INTO MERCHANDISE_TYPE_INF  (
+		         MERCHANDISE_TYPE_ID, 
+		         MERCHANDISE_TYPE_NAME,
+		         BUSINESS_ID
+				)
+		VALUES (
+		          #{merchandiseId}, 
+		          #{merchandiseType},
+		          #{businessId}
+		      )
+	</insert>
+	<delete id="deleteEnertyById" parameterType="com.yuanlai.agent.entity.MerchandiseTypeInf">
+		DELETE FROM MERCHANDISE_TYPE_INF
+		WHERE MERCHANDISE_TYPE_ID = #{merchandiseId}
+		and BUSINESS_ID = #{businessId}	 
+	</delete>
+	<select id="selectEntity" parameterType="com.yuanlai.agent.entity.MerchandiseTypeInf" resultMap="MerchandiseTypeMap">
+		SELECT 
+		        MERCHANDISE_TYPE_ID, 
+		        MERCHANDISE_TYPE_NAME
+		FROM 
+		        MERCHANDISE_TYPE_INF
+		WHERE MERCHANDISE_TYPE_ID = #{merchandiseId}	
+	          AND BUSINESS_ID = #{businessId}
+	</select>
+	
+	<update id="updateEntity" parameterType="com.yuanlai.agent.entity.MerchandiseTypeInf">
+		UPDATE 
+				MERCHANDISE_TYPE_INF
+		<set>
+		        <if test="merchandiseType!= null and merchandiseType!= ''">
+						MERCHANDISE_TYPE_NAME = #{merchandiseType}
+				</if>
+		</set>
+		WHERE
+			MERCHANDISE_TYPE_ID = #{merchandiseId}  AND BUSINESS_ID = #{businessId}
+	</update>
+</mapper>

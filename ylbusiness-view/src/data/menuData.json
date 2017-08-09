@@ -1,0 +1,119 @@
+[
+    {"key": "DEMO", "text": "示例", "to": "", "icon": "user", "children": [
+        {"key": "Demo00", "text": "DEMO00", "to": "main/demo/00"},
+        {"key": "Demo02", "text": "DEMO02", "to": "main/demo/02"},
+        {"key": "Demo04", "text": "DEMO04", "to": "main/demo/04"}
+    ]},
+    {"key": "auth", "text": "系统管理", "to": "", "icon": "user", "children": [
+        {"key": "userManage", "text": "用户管理", "to": "main/auth/userManage"},
+        {"key": "roleManage", "text": "角色管理", "to": "main/auth/roleManage"},
+        {"key": "orgManage", "text": "机构管理", "to": "main/auth/orgManage"},
+        {"key": "menuManage", "text": "菜单管理", "to": "main/auth/menuManage"}
+    ]},
+    {"key": "record", "text": "记录管理", "to": "", "icon": "user", "children": [
+        {"key": "callbackRecord", "text": "回调记录", "to": "main/record/callbackRecord"}
+    ]},
+    {"key": "对账管理", "text": "对账管理", "to": "", "icon": "pay-circle-o", "children": [
+        {"key": "试算平衡", "text": "试算平衡", "to": "", "icon": "check-circle", "children": [
+            {"key": "accChkBalance", "text": "账户平衡查询", "to": "main/chk/chkBalanceManage/accChkBalance"},
+            {"key": "subChkBalance", "text": "科目平衡查询", "to": "main/chk/chkBalanceManage/subChkBalance"},
+            {"key": "accSysChkBalance", "text": "账户体系平衡查询", "to": "main/chk/chkBalanceManage/accSysChkBalance"},
+            {"key": "subSysChkBalance", "text": "科目体系平衡查询", "to": "main/chk/chkBalanceManage/subSysChkBalance"}
+        ]}
+    ]},
+    {"key": "对账管理", "text": "对账管理", "to": "", "icon": "pay-circle-o", "children": [
+            {"key": "对账模块", "text": "对账模块", "to": "", "icon": "check-circle", "children": [
+                {"key": "artCoreReconciliation", "text": "人工核心对账", "to": "main/chk/chkAccountManage/artCoreReconciliation"},
+                {"key": "artPayTunnelReconciliation", "text": "人工支付通道对账", "to": "main/chk/chkAccountManage/artPayTunnelReconciliation"},
+                {"key": "coreAccDetailQryManage", "text": "核心对账明细查询", "to": "main/chk/chkAccountManage/coreAccDetailQryManage"},
+                {"key": "payChnSumReconciliationQryManage", "text": "支付通道汇总对账查询", "to": "main/chk/chkAccountManage/payChnSumReconciliationQryManage"},
+                {"key": "payChnDetReconciliationQryManage", "text": "支付通道明细对账查询", "to": "main/chk/chkAccountManage/payChnDetReconciliationQryManage"},
+                {"key": "doubtReconciliationQryManage", "text": "对账存疑查询", "to": "main/chk/chkAccountManage/doubtReconciliationQryManage"}
+            ]},
+            {"key": "错账管理", "text": "错账管理", "to": "main/chk/errorInfManage"}
+    ]},
+    {"key": "风控管理", "text": "风控管理", "to": "", "icon": "exception", "children": [
+        {"key": "指定用户限额管理", "text": "指定用户限额管理", "to": "main/rcs/limit/limitOneUserManage"},
+        {"key": "分类用户限额管理", "text": "分类用户限额管理", "to": "main/rcs/limit/limitAllUserManage"},
+        {"key": "指定商户限额管理", "text": "指定商户限额管理", "to": "main/rcs/limit/limitOneMerManage"},
+        {"key": "所有商户限额管理", "text": "所有商户限额管理", "to": "main/rcs/limit/limitAllMerManage"},
+        {"key": "用户等级规则管理", "text": "用户等级规则管理", "to": "main/rcs/userLevelRuleManage"},
+        {"key": "用户等级查询", "text": "用户等级查询", "to": "main/rcs/userLevelInfQryManage"},
+        {"key": "黑名单管理", "text": "黑名单管理", "to": "main/rcs/payBlackInfManage"},
+        {"key": "异常规则管理", "text": "异常规则管理", "to": "main/rcs/except/exceptRuleManage"},
+        {"key": "实时监控查询", "text": "实时监控查询", "to": "main/rcs/txnRecordInfManage"},
+        {"key": "实时监控历史查询", "text": "实时监控历史查询", "to": "main/rcs/txnRecordHisManage"},
+        {"key": "可疑交易管理", "text": "可疑交易管理", "to": "main/rcs/exceptTranSusManage"},
+        {"key": "异常交易管理", "text": "异常交易管理", "to": "main/rcs/exceptTranConfirmManage"}
+    ]},
+    {"key": "USER", "text": "用户管理", "to": "", "icon": "user", "children": [
+        {"key": "UserBasic", "text": "用户基本信息管理", "to": "main/user/UserBasic"},
+        {"key": "UserCardRel", "text": "用户银行卡绑定信息管理", "to": "main/user/UserCardRel"},
+        {"key": "UserAccount", "text": "用户账户信息管理", "to": "main/user/UserAccount"},
+        {"key": "UserStl", "text": "用户结算信息管理", "to": "main/user/UserStl"}
+	]},
+    {"key": "代理商管理", "text": "代理商管理", "to": "", "icon": "setting", "children": [
+        {"key": "信息管理", "text": "信息管理", "to": "main/agt/agtPayManage"},
+        {"key": "分润信息管理", "text": "分润信息管理", "to": "main/agt/agtPayShaManage"},
+        {"key": "申请代理商", "text": "申请代理商", "to": "main/agt/apply/agtPayApply"}
+    ]},
+    {"key": "商户管理", "text": "商户管理", "to": "", "icon": "setting", "children": [
+        {"key": "merPayManage", "text": "商户信息维护", "to": "main/mer/merPayManage"},
+        {"key": "merRegister", "text": "商户开户申请", "to": "main/mer/MerRegister"}
+    ]},
+    {"key": "支付渠道管理", "text": "支付渠道管理", "to": "", "icon": "setting", "children": [
+        {"key": "支付渠道机构", "text": "支付渠道机构", "to": "main/chn/payOrgManage"},
+        {"key": "支付渠道银行", "text": "支付渠道银行", "to": "main/chn/chnPayOrgBankManage"},
+        {"key": "支付渠道商户", "text": "支付渠道商户", "to": "main/chn/payOrgMerManage"}
+    ]},
+    {"key": "公共管理", "text": "公共管理", "to": "", "icon": "setting", "children": [
+        {"key": "公告管理", "text": "公告管理", "to": "main/pub/pubAnnment"},
+        {"key": "日志查看", "text": "日志查看", "to": "main/pub/pubLoginfo"},
+        {"key": "消息查看", "text": "消息查看", "to": "main/pub/pubSendMsg"},
+        {"key": "节假日管理", "text": "节假日管理", "to": "main/pub/pubHoliday"},
+        {"key": "参数维护", "text": "参数维护", "to": "main/pub/pubConfig"}
+        
+    ]},
+    {"key": "订单管理", "text": "订单管理", "to": "", "icon": "setting", "children": [
+        {"key": "QryOrdSubPrd", "text": "商品订单查询", "to": "main/order/QryOrdSubPrd"},
+        {"key": "qryOrdSubCharge", "text": "充值订单查询", "to": "main/order/qryOrdSubCharge"},
+        {"key": "qryOrdSubWithdraw",  "text": "提现订单查询", "to": "main/order/qryOrdSubWithdraw"},
+        {"key": "qryOrdSubTrans", "text": "转账订单查询", "to": "main/order/qryOrdSubTrans"},
+        {"key": "qryOrdSubRef", "text": "退款订单查询", "to": "main/order/qryOrdSubRef"}
+    ]},
+    {"key": "任务管理", "text": "任务管理", "to": "", "icon": "bars", "children": [
+        {"key": "myApplyTaskManage" , "text": "我的申请", "to": "main/task/myapplytask/myApplyTaskManage"},
+        {"key": "toDoTaskManage"    , "text": "我的待办", "to": "main/task/todotask/toDoTaskManage"},
+        {"key": "myFinishTaskManage", "text": "我的已办", "to": "main/task/myfinishtask/myFinishTaskManage"}
+    ]},
+    {"key": "账户管理", "text": "账户管理", "to": "", "icon": "solution", "children": [
+        {"key": "casAccManage", "text": "账户维护", "to": "main/cas/casAccManage"},
+        {"key": "casAccTxnJnl", "text": "账务查询", "to": "main/cas/casAccTxnJnl"},
+        {"key": "casAccImprove", "text": "账务调账", "to": "main/cas/casAccImprove"},
+        {"key": "试算平衡", "text": "试算平衡", "to": "", "icon": "pay-circle-o", "children": [
+            {"key": "accChkBalance", "text": "账户平衡查询", "to": "main/cas/chkBalanceManage/accChkBalance"},
+            {"key": "subChkBalance", "text": "科目平衡查询", "to": "main/cas/chkBalanceManage/subChkBalance"},
+            {"key": "accSysChkBalance", "text": "账户体系平衡查询", "to": "main/cas/chkBalanceManage/accSysChkBalance"},
+            {"key": "subSysChkBalance", "text": "科目体系平衡查询", "to": "main/cas/chkBalanceManage/subSysChkBalance"}
+        ]}
+    ]},
+    {"key": "路由管理", "text": "路由管理", "to": "", "icon": "setting", "children": 
+        [
+            {"key": "routerMerManage", "text": "路由维护", "to": "main/router/RouterManage"}
+        ]
+    },
+   {"key": "结算管理", "text": "结算管理", "to": "", "icon": "bars", "children": 
+        [  
+            {"key": "clearingTotManage", "text": "清分汇总查询", "to": "main/clr/clearingTotManage"},
+            {"key": "settlementTotManage", "text": "结算汇总查询", "to": "main/stl/settlementTotManage"},
+            {"key": "shrTotManage", "text": "分润汇总查询", "to": "main/stl/shrTotManage"}
+        ]
+    },
+     {"key": "费率管理", "text": "费率管理", "to": "", "icon": "setting", "children": [
+        {"key": "feeManage", "text": "费率信息管理", "to": "main/fee/feeManage"}
+    ]},
+    {"key": "报表中心", "text": "报表中心", "to": "", "icon": "setting", "children": [
+        {"key": "feeManage", "text": "用户每日交易表", "to": "main/report/usrDailyOrder"}
+    ]}
+    
+]

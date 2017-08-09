@@ -1,0 +1,280 @@
+// 公共参数
+@offset: -40px;
+@contentTop: 54px;
+
+// 分辨率高于1440px采用此配置
+@headHeight: 72px;
+@logoTop: 18px;
+@baseTop: 120px;
+@sizeCard: 180px;
+@radiusCard: @sizeCard / 2 - 40px;
+@sizePay: 260px;
+@radiusPay: @sizePay / 2 - 40px;
+@sizeAuth: 220px;
+@radiusAuth: @sizeAuth / 2 - 40px;
+@sizePos: 240px;
+@radiusPos: @sizePos / 2 - 40px;
+@sizeMore: 160px;
+@radiusMore: @sizeMore / 2 - 40px;
+@iconTop: 0px;
+@iconSize: 56px;
+@nameSize: 28px;
+
+// 分辨率低于1440px采用此配置
+@headHeightLow: 64px;
+@logoTopLow: 14px;
+@baseTopLow: 48px;
+@sizeCardLow: 140px;
+@radiusCardLow: @sizeCardLow / 2 - 40px;
+@sizePayLow: 220px;
+@radiusPayLow: @sizePayLow / 2 - 40px;
+@sizeAuthLow: 180px;
+@radiusAuthLow: @sizeAuthLow / 2 - 40px;
+@sizePosLow: 200px;
+@radiusPosLow: @sizePosLow / 2 - 40px;
+@sizeMoreLow: 120px;
+@radiusMoreLow: @sizeMoreLow / 2 - 40px;
+@iconTopLow: 16px;
+@iconSizeLow: 40px;
+@nameSizeLow: 22px;
+
+.td-sys-inf {
+  width: 100%;
+  height: 100%;
+  background-image: url(../app/image/sysinf-bg.png);
+  // background-repeat: no-repeat;
+  background-size: cover;
+  text-align: center;
+
+  .td-sys-inf-header-warp {
+    position: fixed;
+    width: 100%;
+    height: @headHeight;
+    top: 0px;
+    background-color: #000;
+    opacity: 0.6;
+    -moz-opacity: 0.6;
+  }
+
+  .td-sys-inf-header {
+    position: fixed;
+    width: 100%;
+    height: @headHeight;
+    line-height: @headHeight;
+    top: 0px;
+    padding: 0px 96px;
+    .td-sys-inf-header-logo {
+      float: left;
+      width: 140px;
+      height: 40px;
+      margin-top: @logoTop;
+      background-image: url(../app/image/logo.png);
+      background-repeat: no-repeat;
+    }
+
+    ul {
+      float: right;
+      li {
+        float: left;
+        list-style: none;
+        a {
+          color: #fff;
+          font-size: 16px;
+          margin-left: 24px;
+          -webkit-transition: all .5s ease;
+          transition: all .5s ease;
+          &:hover {
+            color: #2db7f5;
+          }
+        }
+      }
+    }
+  }
+
+  .td-sys-inf-list {
+    display: inline-block;
+    margin: auto;
+
+    .td-sys-inf-warp {
+      float: left;
+
+      a {
+        color: #fff;
+        font-size: @nameSize;
+        i {
+          margin-top: @iconTop;
+          font-size: @iconSize;
+        }
+      }
+      
+      .td-sys-inf-line-warp {
+        margin-left: @offset;
+
+        .td-sys-inf-line {
+          margin: auto;
+          width: 0px;
+          border-left: solid 2px #AAC1CE;
+        }
+
+        .td-sys-inf-line-card {
+          height: @baseTop + 300px;
+        }
+
+        .td-sys-inf-line-pay {
+          height: @baseTop + 80px;
+        }
+
+        .td-sys-inf-line-auth {
+          height: @baseTop + 300px;
+        }
+
+        .td-sys-inf-line-pos {
+          height: @baseTop + 80px;
+        }
+
+        .td-sys-inf-line-more {
+          height: @baseTop + 300px;
+        }
+      }
+
+      .td-sys-inf-card {
+        position: relative;
+        width: @sizeCard;
+        height: @sizeCard;
+        border-radius: @sizeCard / 2;
+        padding-top: @sizeCard / 2 - @contentTop;
+        background-color: #4AB647;
+        z-index: 1;
+        background-image: -webkit-radial-gradient(@radiusCard @radiusCard at @sizeCard / 2 @sizeCard / 2, #67CC63, #4AB647);
+        background-image: radial-gradient(@radiusCard @radiusCard at @sizeCard / 2 @sizeCard / 2, #67CC63, #4AB647);
+      }
+
+      .td-sys-inf-pay {
+        position: relative;
+        width: @sizePay;
+        height: @sizePay;
+        border-radius: @sizePay / 2;
+        padding-top: @sizePay / 2 - @contentTop;
+        margin-left: @offset;
+        background-color: #60A0EF;
+        z-index: 2;
+        background-image: -webkit-radial-gradient(@radiusPay @radiusPay at @sizePay / 2 @sizePay / 2, #75C1F2, #60A0EF);
+        background-image: radial-gradient(@radiusPay @radiusPay at @sizePay / 2 @sizePay / 2, #75C1F2, #60A0EF);
+      }
+
+      .td-sys-inf-auth {
+        position: relative;
+        width: @sizeAuth;
+        height: @sizeAuth;
+        border-radius: @sizeAuth / 2;
+        padding-top: @sizeAuth / 2 - @contentTop;
+        margin-left: @offset;
+        background-color: #F05A3C;
+        z-index: 1;
+        background-image: -webkit-radial-gradient(@radiusAuth @radiusAuth at @sizeAuth / 2 @sizeAuth / 2, #F37D65, #F05A3C);
+        background-image: radial-gradient(@radiusAuth @radiusAuth at @sizeAuth / 2 @sizeAuth / 2, #F37D65, #F05A3C);
+      }
+
+      .td-sys-inf-pos {
+        position: relative;
+        width: @sizePos;
+        height: @sizePos;
+        border-radius: @sizePos / 2;
+        padding-top: @sizePos / 2 - @contentTop;
+        margin-left: @offset;
+        background-color: #3C8EBD;
+        z-index: 2;
+        background-image: -webkit-radial-gradient(@radiusPos @radiusPos at @sizePos / 2 @sizePos / 2, #5A9FC3, #3C8EBD);
+        background-image: radial-gradient(@radiusPos @radiusPos at @sizePos / 2 @sizePos / 2, #5A9FC3, #3C8EBD);
+      }
+
+      .td-sys-inf-more {
+        position: relative;
+        width: @sizeMore;
+        height: @sizeMore;
+        border-radius: @sizeMore / 2;
+        padding-top: @sizeMore / 2 - @contentTop;
+        margin-left: @offset;
+        background-color: #4BC1CC;
+        z-index: 1;
+        background-image: -webkit-radial-gradient(@radiusMore @radiusMore at @sizeMore / 2 @sizeMore / 2, #6DD1D2, #4BC1CC);
+        background-image: radial-gradient(@radiusMore @radiusMore at @sizeMore / 2 @sizeMore / 2, #6DD1D2, #4BC1CC);
+      }
+    }
+  }
+}
+
+@media (max-width: 1440px) {
+  .td-sys-inf {
+    .td-sys-inf-header-warp {
+      height: @headHeightLow;
+    }
+    .td-sys-inf-header {
+      height: @headHeightLow;
+      line-height: @headHeightLow;
+      .td-sys-inf-header-logo {
+        margin-top: @logoTopLow;
+      }
+    }
+
+    .td-sys-inf-list {
+      .td-sys-inf-warp {
+        a {
+          font-size: @nameSizeLow;
+          i {
+            margin-top: @iconTop;
+            font-size: @iconSizeLow;
+          }
+        }
+
+        .td-sys-inf-line-warp {
+          .td-sys-inf-line-card {
+            height: @baseTopLow + 300px;
+          }
+          .td-sys-inf-line-pay {
+            height: @baseTopLow + 80px;
+          }
+          .td-sys-inf-line-auth {
+            height: @baseTopLow + 300px;
+          }
+          .td-sys-inf-line-pos {
+            height: @baseTopLow + 80px;
+          }
+          .td-sys-inf-line-more {
+            height: @baseTopLow + 300px;
+          }
+        }
+        .td-sys-inf-card {
+          width: @sizeCardLow;
+          height: @sizeCardLow;
+          border-radius: @sizeCardLow / 2;
+          padding-top: @sizeCardLow / 2 - @contentTop;
+        }
+        .td-sys-inf-pay {
+          width: @sizePayLow;
+          height: @sizePayLow;
+          border-radius: @sizePayLow / 2;
+          padding-top: @sizePayLow / 2 - @contentTop;
+        }
+        .td-sys-inf-auth {
+          width: @sizeAuthLow;
+          height: @sizeAuthLow;
+          border-radius: @sizeAuthLow / 2;
+          padding-top: @sizeAuthLow / 2 - @contentTop;
+        }
+        .td-sys-inf-pos {
+          width: @sizePosLow;
+          height: @sizePosLow;
+          border-radius: @sizePosLow / 2;
+          padding-top: @sizePosLow / 2 - @contentTop;
+        }
+        .td-sys-inf-more {
+          width: @sizeMoreLow;
+          height: @sizeMoreLow;
+          border-radius: @sizeMoreLow / 2;
+          padding-top: @sizeMoreLow / 2 - @contentTop;
+        }
+      }
+    }
+  }
+}

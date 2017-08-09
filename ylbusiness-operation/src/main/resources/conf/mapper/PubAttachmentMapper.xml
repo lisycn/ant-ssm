@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuanlai.agent.dao.PubAttachmentDao" >
+  <resultMap id="Attachment" type="com.yuanlai.agent.entity.PubAttachment">
+        <result column="ID"      	property="id" 			/>
+        <result column="MODULENAME" property="moduleName" 	/>
+        <result column="TABLENAME"	property="tableName" 	/>
+        <result column="PKID" 		property="pkId" 		/>
+        <result column="LX" 		property="lx" 			/>
+        <result column="ORDERNUM" 	property="orderNum" 	/>
+        <result column="FJNAME" 	property="fjName" 		/>
+        <result column="FJPATH" 	property="fjPath" 		/>
+        <result column="FJO" 		property="fjo" 			/>
+        <result column="FJT" 		property="fjt" 			/>
+        <result column="SFSX" 		property="sfsx" 		/>
+    </resultMap>
+
+    <sql id="pageHeader">
+	    <choose>
+	        <when test="_databaseId == 'mysql'" />
+	        <otherwise>
+	            <if test="start != null and end != null">
+	                select * from (select a.*, rownum rn from (
+	            </if>
+	        </otherwise>
+	    </choose>
+	  </sql>
+	  <sql id="pageFooter">
+	    <choose>
+	        <when test="_databaseId == 'mysql'">
+	            <if test="start != null and limit != null">
+	                limit ${start}, ${limit}
+	            </if>
+	        </when>
+	        <otherwise>
+	            <if test="start != null and end != null">
+	                ) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+	            </if>
+	        </otherwise>
+	    </choose>
+	  </sql>
+
+	  <sql id="countListHeader">
+	    <if test="countList == 'countList' ">
+	        select count(1) total from (
+	    </if>
+	  </sql>
+	  <sql id="countListFooter">
+	    <if test="countList == 'countList' ">
+	        )countList
+	    </if>
+	  </sql>
+
+	<select id="selectList" resultMap="Attachment" parameterType="java.util.Map">
+ 		SELECT * FROM ATTACHMENT
+        <trim prefix="WHERE" prefixOverrides="AND" >
+           <if test ="ID !=null" >
+              and ID = #{ID,jdbcType=VARCHAR}
+           </if>
+           <if test ="TABLENAME !=null" >
+              and TABLENAME = #{TABLENAME,jdbcType=VARCHAR}
+           </if>
+           <if test ="PKID !=null" >
+              and PKID = #{PKID,jdbcType=VARCHAR}
+           </if>
+        </trim>
+	</select>
+
+	<insert id="insertEntity" parameterType="com.yuanlai.agent.entity.PubAttachment">
+	  	INSERT INTO ATTACHMENT (ID,TABLENAME,PKID,LX,ORDERNUM,FJNAME,FJPATH,FJT,SFSX)
+	  	VALUES (#{id},#{tableName},#{pkId},#{lx},#{orderNum},#{fjName},#{fjPath},#{fjt},#{sfsx})
+	</insert>
+
+	<update id="updateNewEntity" parameterType="java.util.Map">
+ 		UPDATE ATTACHMENT
+ 		SET PKID = #{PKID},
+ 		SFSX = '1'
+ 		WHERE ID in
+ 		<foreach item="item" index="index" collection="IDS" open="(" separator="," close=")">
+	        #{item}
+	  	</foreach>
+
+
+	</update>
+
+	<update id="updateNewPkId" parameterType="java.util.Map">
+ 		UPDATE ATTACHMENT
+ 		SET PKID = #{NEWPKID}
+ 		WHERE PKID =  #{PKID} AND TABLENAME = #{TABLENAME}
+	</update>
+
+	<update id="updateHasSaveEntity" parameterType="com.yuanlai.agent.entity.PubAttachment">
+ 		UPDATE ATTACHMENT
+ 		<set>
+	      	<if test="fjName != null">fjName = #{fjName},</if>
+	      	<if test="fjPath != null">fjPath = #{fjPath},</if>
+	      	<if test="fjt != null">fjt = #{fjt},</if>
+	      	<if test="sfsx != null">sfsx = #{sfsx}</if>
+	    </set>
+ 		WHERE ID = #{id}
+	</update>
+
+	<delete id="deleteEntity" parameterType="com.yuanlai.agent.entity.PubAttachment">
+ 		DELETE FROM ATTACHMENT WHERE ID = #{id}
+	</delete>
+
+	<delete id="deleteSameTypeEntity" parameterType="com.yuanlai.agent.entity.PubAttachment">
+ 		DELETE FROM ATTACHMENT
+ 		WHERE TABLENAME = #{tableName}
+ 		AND PKID = #{pkId}
+ 		AND LX = #{lx}
+ 		AND ORDERNUM = #{orderNum}
+ 		AND ID != #{id}
+	</delete>
+
+	<!--修改审核成功的时候根据PKIDba老的PKID置为空  -->
+	<update id="updateNewPkIdByPkId" parameterType="java.util.Map">
+ 		UPDATE ATTACHMENT  SET PKID = #{NEWPKID}
+ 		WHERE PKID =  #{PKID}
+	</update>
+
+	<!--根据不同的条件来查找附件表中的信息   -->
+	<select id="selectListByCondition" resultMap="Attachment" parameterType="java.util.Map">
+ 		SELECT * FROM ATTACHMENT
+ 		<where>
+ 			1=1
+	 		<if test="ID != null">
+				AND ID = #{ID}
+			</if>
+			<if test="TABLENAME != null">
+				AND TABLENAME = #{TABLENAME}
+			</if>
+			<if test="PKID != null">
+				AND PKID = #{PKID}
+			</if>
+			<if test="IDS !=null">
+				AND ID in
+				<foreach item="item" index="index" collection="IDS" open="(" separator="," close=")">
+	        		#{item}
+	  			</foreach>
+			</if>
+			<if test="START_TIM != null and START_TIM !='' ">
+				and fjt &gt;= #{START_TIM}
+			</if>
+			<if test="END_TIM != null and END_TIM !='' ">
+				and fjt &lt; #{END_TIM}
+			</if>
+			<if test="SFSX != null and SFSX !='' ">
+				and SFSX = #{SFSX}
+			</if>
+		</where>
+	</select>
+
+	<delete id="delAttRecord" parameterType="java.util.Map">
+		delete
+		from
+			ATTACHMENT
+		where
+			1=1
+			<if test="START_TIM != null and START_TIM !='' ">
+				and fjt &gt;= #{START_TIM}
+			</if>
+			<if test="END_TIM != null and END_TIM !='' ">
+				and fjt &lt;= #{END_TIM}
+			</if>
+			<if test="SFSX != null and SFSX !='' ">
+				and SFSX = #{SFSX}
+			</if>
+	</delete>
+
+	<select id="qryAttachList" resultType="java.util.Map">
+		<include refid="countListHeader" />
+	  	<include refid="pageHeader" />
+
+		SELECT
+			*
+		FROM
+			 ATTACHMENT
+ 		<where>
+ 			1=1
+	 		<if test="ID != null">
+				AND ID = #{ID}
+			</if>
+			<if test="TABLENAME != null">
+				AND TABLENAME = #{TABLENAME}
+			</if>
+			<if test="PKID != null">
+				AND PKID = #{PKID}
+			</if>
+			<if test="IDS !=null">
+				AND ID in
+				<foreach item="item" index="index" collection="IDS" open="(" separator="," close=")">
+	        		#{item}
+	  			</foreach>
+			</if>
+			<if test="START_TIM != null and START_TIM !='' ">
+				and fjt &gt;= #{START_TIM}
+			</if>
+			<if test="END_TIM != null and END_TIM !='' ">
+				and fjt &lt; #{END_TIM}
+			</if>
+			<if test="SFSX != null and SFSX !='' ">
+				and SFSX = #{SFSX}
+			</if>
+		</where>
+
+		<include refid="pageFooter" />
+    	<include refid="countListFooter" />
+
+	</select>
+	<update id="updAttachById" parameterType="java.util.Map">
+ 		UPDATE ATTACHMENT
+ 		SET PKID = #{PKID}
+ 		WHERE ID = #{attachkey}
+	</update>
+
+	<!--根据ID信息修改附件状态  -->
+	<update id="updateAttachStsById" parameterType="map">
+		UPDATE ATTACHMENT
+ 		<set>
+ 			<if test="PKID != null">PKID = #{PKID},</if>
+	      	<if test="SFSX != null">SFSX = #{SFSX}</if>
+	    </set>
+ 		where ID = #{ID}
+	</update>
+</mapper>

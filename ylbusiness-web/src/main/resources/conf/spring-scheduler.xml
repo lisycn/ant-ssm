@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+      http://www.springframework.org/schema/aop   
+      http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+	
+	<!-- T+1日生成交易报表   -->
+<!--  <bean id="codePayReportTaskBean" class="com.yuanlai.agent.schedule.CodePayReportTask" />
+	<bean id="codePayReportTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="codePayReportTaskBean" />
+		<property name="targetMethod" value="run"  />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="codePayReportTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="codePayReportTaskDetail" />
+		每天凌晨1点运行
+		<property name="cronExpression" value="0 0 1 * * ?" />
+		<property name="cronExpression" value="0 0/5 * * * ?" />
+	</bean>
+	
+	T+1日生成日报表  
+	<bean id="dailyReportTaskBean" class="com.yuanlai.agent.schedule.CodePayDailyReportTask" />
+	<bean id="dailyReportTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="dailyReportTaskBean" />
+		<property name="targetMethod" value="run"  />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="dailyReportTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="dailyReportTaskDetail" />
+		每天凌晨2点运行
+		<property name="cronExpression" value="0 0 2 * * ?" />
+		<property name="cronExpression" value="0 0/10 * * * ?" />
+	</bean>
+	
+	每月1日生成上月报表  
+	<bean id="monthReportTaskBean" class="com.yuanlai.agent.schedule.CodePayMonthReportTask" />
+	<bean id="monthReportTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="monthReportTaskBean" />
+		<property name="targetMethod" value="run"  />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="monthReportTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="monthReportTaskDetail" />
+		每月1日凌晨3点运行
+		<property name="cronExpression" value="0 0 3 1 * ?" />
+		<property name="cronExpression" value="0 0/10 * * * ?" />
+	</bean>
+		
+	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				交易报表
+ 			   	<ref bean="codePayReportTaskTrigger"/> 
+				日报表
+ 			   	<ref bean="dailyReportTaskTrigger"/> 
+ 			   	月报表
+ 			   	<ref bean="monthReportTaskTrigger"/>
+			</list>
+		</property>
+		quartz配置文件路径
+	 	<property name="configLocation" value="classpath:conf/quartz.properties" />
+	</bean>
+ -->
+</beans>

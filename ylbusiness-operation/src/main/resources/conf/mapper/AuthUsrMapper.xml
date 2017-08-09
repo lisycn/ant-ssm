@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuanlai.agent.dao.AuthUsrDao">
+    <resultMap id="BaseResultMap" type="com.yuanlai.agent.entity.AuthUsr">
+        <id column="USR_ID" property="usrId" jdbcType="VARCHAR"/>
+        <result column="ORG_ID" property="orgId" jdbcType="VARCHAR"/>
+        <result column="USR_NAME" property="usrName" jdbcType="VARCHAR"/>
+        <result column="USR_PSW" property="usrPsw" jdbcType="VARCHAR"/>
+        <result column="USR_REAL_NAME" property="usrRealName" jdbcType="VARCHAR"/>
+        <result column="USR_DESC" property="usrDesc" jdbcType="VARCHAR"/>
+        <result column="USR_STATUS" property="usrStatus" jdbcType="CHAR"/>
+        <result column="LAST_LOGIN_TIME" property="lastLoginTime" jdbcType="CHAR"/>
+        <result column="FAIL_LOGIN_TIMES" property="failLoginTimes" jdbcType="VARCHAR"/>
+        <result column="CRE_OBJ" property="creObj" jdbcType="VARCHAR"/>
+        <result column="CRE_TIM" property="creTim" jdbcType="CHAR"/>
+        <result column="UPD_OBJ" property="updObj" jdbcType="VARCHAR"/>
+        <result column="UPD_TIM" property="updTim" jdbcType="CHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    USR_ID, ORG_ID, USR_NAME, USR_PSW, USR_REAL_NAME, USR_DESC, USR_STATUS, LAST_LOGIN_TIME, 
+    FAIL_LOGIN_TIMES, CRE_OBJ, CRE_TIM, UPD_OBJ, UPD_TIM
+  </sql>
+    <sql id="Base_Column_List_Special">
+    USR_ID as usrId, ORG_ID as orgId, USR_NAME as usrName, USR_PSW as usrPsw, 
+    USR_REAL_NAME as usrRealName, USR_DESC as usrDesc, USR_STATUS as usrStatus, 
+    LAST_LOGIN_TIME as lastLoginTime, FAIL_LOGIN_TIMES as failLoginTimes, 
+    CRE_OBJ as creObj, CRE_TIM as creTim, UPD_OBJ as updObj, UPD_TIM as updTim
+  </sql>
+
+    <select id="selectUsrAuthForLogin" resultType="map" parameterType="map">
+        select distinct u.USR_NAME as usrName, si.SYS_ID as sysId, i.PARENT_ITM_ID as parentItmId,i.ICON as icon,
+        i.ITM_ID as 'key',i.ITM_NAME as 'text',i.ITM_TYP as itmTyp,i.ITM_URL as 'to'
+        from AUTH_USR u, AUTH_USR_ROLE ur, AUTH_ROLE r,AUTH_ROLE_ITEM ri, AUTH_ITEM i, AUTH_SYS_INF si
+        where u.USR_ID=ur.USR_ID and ur.ROLE_ID=r.ROLE_ID and r.ROLE_ID=ri.ROLE_ID and ri.ITM_ID=i.ITM_ID and
+        si.SYS_ID=i.SYS_ID
+        and r.ROLE_ID is not null and r.IS_USE='1'
+        and i.ITM_ID is not null and i.IS_USE='1'
+        and i.PARENT_ITM_ID != '000'
+        and u.USR_ID = #{usrId,jdbcType=VARCHAR}
+        and si.SYS_ID = #{sysId,jdbcType=VARCHAR}
+        <if test="hasPrt == null">
+            and length(trim(i.PARENT_ITM_ID))=3
+        </if>
+        <if test="hasPrt != null">
+            and length(trim(i.PARENT_ITM_ID))>3
+        </if>
+        order by i.ITM_ID
+    </select>
+
+    <select id="selectByUsrId" resultType="map" parameterType="java.lang.String">
+    select u.USR_ID as usrId, u.ORG_ID as orgId,o.ORG_NAME as orgName, u.USR_NAME as usrName, u.USR_PSW as usrPsw, 
+        u.USR_REAL_NAME as usrRealName, u.USR_DESC as usrDesc, u.USR_STATUS as usrStatus, 
+        u.LAST_LOGIN_TIME as lastLoginTime, u.FAIL_LOGIN_TIMES as failLoginTimes, 
+        u.CRE_OBJ as creObj, u.CRE_TIM as creTim, u.UPD_OBJ as updObj, u.UPD_TIM as updTim
+    from AUTH_USR u left join AUTH_ORG o on u.ORG_ID=o.ORG_ID
+    where u.USR_ID = #{usrId,jdbcType=VARCHAR}
+  </select>
+
+    <select id="selectUsrCurrRole" parameterType="java.lang.String" resultType="java.util.Map">
+    select u.USR_ID as usrId,r.ROLE_ID as roleId,r.ROLE_NAME as roleName
+    from AUTH_USR u left join AUTH_USR_ROLE ur on u.USR_ID=ur.USR_ID
+    					 left join AUTH_ROLE r on ur.ROLE_ID=r.ROLE_ID
+    where u.USR_ID = #{usrId,jdbcType=VARCHAR} and r.ROLE_ID is not null
+  </select>
+
+    <delete id="deleteByUsrIds" parameterType="java.util.List">
+        delete from AUTH_USR
+        <where>
+            USR_ID in
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </delete>
+
+    <select id="selectStatusUsr" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from AUTH_USR
+        <where>
+            USR_STATUS=#{usrStatus,jdbcType=CHAR} and USR_ID in
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+    <update id="disOrEnable" parameterType="java.lang.String">
+    update AUTH_USR set USR_STATUS=#{0}, UPD_TIM=#{3},UPD_OBJ=#{2} where USR_ID = #{1}
+  </update>
+    <update id="updateOrgIdEmpty" parameterType="java.lang.String">
+    update AUTH_USR set ORG_ID='' where ORG_ID=#{0}
+  </update>
+    <select id="selectByUsrName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from AUTH_USR
+        where USR_NAME = #{usrName,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getSysInfByUsr" parameterType="java.util.Map" resultType="java.util.Map">
+    select e.SYS_ID 'sysId', e.SYS_NAM 'sysName', e.SYS_URL 'url', e.SYS_ICON 'icon' from AUTH_SYS_INF e,
+    	(select distinct(d.SYS_ID) from AUTH_ROLE a,AUTH_USR_ROLE b, AUTH_ROLE_ITEM c, AUTH_ITEM d where
+    		a.ROLE_ID=b.ROLE_ID and a.ROLE_ID=c.ROLE_ID and c.ITM_ID=d.ITM_ID and b.USR_ID = #{usrId}
+    	) f
+	where e.SYS_ID=f.SYS_ID
+  </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from AUTH_USR
+        where USR_ID = #{usrId,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from AUTH_USR
+    where USR_ID = #{usrId,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.yuanlai.agent.entity.AuthUsr">
+    insert into AUTH_USR (USR_ID, ORG_ID, USR_NAME, 
+      USR_PSW, USR_REAL_NAME, USR_DESC, 
+      USR_STATUS, LAST_LOGIN_TIME, FAIL_LOGIN_TIMES, 
+      CRE_OBJ, CRE_TIM, UPD_OBJ, 
+      UPD_TIM)
+    values (#{usrId,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{usrName,jdbcType=VARCHAR}, 
+      #{usrPsw,jdbcType=VARCHAR}, #{usrRealName,jdbcType=VARCHAR}, #{usrDesc,jdbcType=VARCHAR}, 
+      #{usrStatus,jdbcType=CHAR}, #{lastLoginTime,jdbcType=CHAR}, #{failLoginTimes,jdbcType=VARCHAR}, 
+      #{creObj,jdbcType=VARCHAR}, #{creTim,jdbcType=CHAR}, #{updObj,jdbcType=VARCHAR}, 
+      #{updTim,jdbcType=CHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.yuanlai.agent.entity.AuthUsr">
+        insert into AUTH_USR
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="usrId != null">
+                USR_ID,
+            </if>
+            <if test="orgId != null">
+                ORG_ID,
+            </if>
+            <if test="usrName != null">
+                USR_NAME,
+            </if>
+            <if test="usrPsw != null">
+                USR_PSW,
+            </if>
+            <if test="usrRealName != null">
+                USR_REAL_NAME,
+            </if>
+            <if test="usrDesc != null">
+                USR_DESC,
+            </if>
+            <if test="usrStatus != null">
+                USR_STATUS,
+            </if>
+            <if test="lastLoginTime != null">
+                LAST_LOGIN_TIME,
+            </if>
+            <if test="failLoginTimes != null">
+                FAIL_LOGIN_TIMES,
+            </if>
+            <if test="creObj != null">
+                CRE_OBJ,
+            </if>
+            <if test="creTim != null">
+                CRE_TIM,
+            </if>
+            <if test="updObj != null">
+                UPD_OBJ,
+            </if>
+            <if test="updTim != null">
+                UPD_TIM,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="usrId != null">
+                #{usrId,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="usrName != null">
+                #{usrName,jdbcType=VARCHAR},
+            </if>
+            <if test="usrPsw != null">
+                #{usrPsw,jdbcType=VARCHAR},
+            </if>
+            <if test="usrRealName != null">
+                #{usrRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="usrDesc != null">
+                #{usrDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="usrStatus != null">
+                #{usrStatus,jdbcType=CHAR},
+            </if>
+            <if test="lastLoginTime != null">
+                #{lastLoginTime,jdbcType=CHAR},
+            </if>
+            <if test="failLoginTimes != null">
+                #{failLoginTimes,jdbcType=VARCHAR},
+            </if>
+            <if test="creObj != null">
+                #{creObj,jdbcType=VARCHAR},
+            </if>
+            <if test="creTim != null">
+                #{creTim,jdbcType=CHAR},
+            </if>
+            <if test="updObj != null">
+                #{updObj,jdbcType=VARCHAR},
+            </if>
+            <if test="updTim != null">
+                #{updTim,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.yuanlai.agent.entity.AuthUsr">
+        update AUTH_USR
+        <set>
+            <if test="orgId != null">
+                ORG_ID = #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="usrName != null">
+                USR_NAME = #{usrName,jdbcType=VARCHAR},
+            </if>
+            <if test="usrPsw != null">
+                USR_PSW = #{usrPsw,jdbcType=VARCHAR},
+            </if>
+            <if test="usrRealName != null">
+                USR_REAL_NAME = #{usrRealName,jdbcType=VARCHAR},
+            </if>
+            <if test="usrDesc != null">
+                USR_DESC = #{usrDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="usrStatus != null">
+                USR_STATUS = #{usrStatus,jdbcType=CHAR},
+            </if>
+            <if test="lastLoginTime != null">
+                LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=CHAR},
+            </if>
+            <if test="failLoginTimes != null">
+                FAIL_LOGIN_TIMES = #{failLoginTimes,jdbcType=VARCHAR},
+            </if>
+            <if test="creObj != null">
+                CRE_OBJ = #{creObj,jdbcType=VARCHAR},
+            </if>
+            <if test="creTim != null">
+                CRE_TIM = #{creTim,jdbcType=CHAR},
+            </if>
+            <if test="updObj != null">
+                UPD_OBJ = #{updObj,jdbcType=VARCHAR},
+            </if>
+            <if test="updTim != null">
+                UPD_TIM = #{updTim,jdbcType=CHAR},
+            </if>
+        </set>
+        where USR_ID = #{usrId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.yuanlai.agent.entity.AuthUsr">
+    update AUTH_USR
+    set ORG_ID = #{orgId,jdbcType=VARCHAR},
+      USR_NAME = #{usrName,jdbcType=VARCHAR},
+      USR_PSW = #{usrPsw,jdbcType=VARCHAR},
+      USR_REAL_NAME = #{usrRealName,jdbcType=VARCHAR},
+      USR_DESC = #{usrDesc,jdbcType=VARCHAR},
+      USR_STATUS = #{usrStatus,jdbcType=CHAR},
+      LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=CHAR},
+      FAIL_LOGIN_TIMES = #{failLoginTimes,jdbcType=VARCHAR},
+      CRE_OBJ = #{creObj,jdbcType=VARCHAR},
+      CRE_TIM = #{creTim,jdbcType=CHAR},
+      UPD_OBJ = #{updObj,jdbcType=VARCHAR},
+      UPD_TIM = #{updTim,jdbcType=CHAR}
+    where USR_ID = #{usrId,jdbcType=VARCHAR}
+  </update>
+    <sql id="pageHeader">
+        <choose>
+            <when test="_databaseId == 'mysql'"/>
+            <otherwise>
+                <if test="start != null and end != null">
+                    select * from (select a.*, rownum rn from (
+                </if>
+            </otherwise>
+        </choose>
+    </sql>
+    <sql id="pageFooter">
+        <choose>
+            <when test="_databaseId == 'mysql'">
+                <if test="start != null and limit != null">
+                    limit ${start}, ${limit}
+                </if>
+            </when>
+            <otherwise>
+                <if test="start != null and end != null">
+                    ) a where rownum &lt;= #{end}) where rn &gt;= #{start}
+                </if>
+            </otherwise>
+        </choose>
+    </sql>
+    <select id="selectByPager" parameterType="java.util.Map" resultType="java.util.Map">
+        <include refid="pageHeader"/>
+        select u.USR_ID as usrId, u.ORG_ID as orgId,o.ORG_NAME as orgName, u.USR_NAME as usrName, u.USR_PSW as usrPsw,
+        u.USR_REAL_NAME as usrRealName, u.USR_DESC as usrDesc, u.USR_STATUS as usrStatus,
+        u.LAST_LOGIN_TIME as lastLoginTime, u.FAIL_LOGIN_TIMES as failLoginTimes,
+        u.CRE_OBJ as creObj, u.CRE_TIM as creTim, u.UPD_OBJ as updObj, u.UPD_TIM as updTim
+        from AUTH_USR u left join AUTH_ORG o on u.ORG_ID=o.ORG_ID
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="usrId !=null">
+                and u.USR_ID = #{usrId,jdbcType=VARCHAR}
+            </if>
+            <if test="orgId !=null">
+                and u.ORG_ID = #{orgId,jdbcType=VARCHAR}
+            </if>
+            <if test="usrName !=null">
+                and u.USR_NAME like CONCAT('%',#{usrName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="usrPsw !=null">
+                and u.USR_PSW = #{usrPsw,jdbcType=VARCHAR}
+            </if>
+            <if test="usrRealName !=null">
+                and u.USR_REAL_NAME like CONCAT('%',#{usrRealName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="usrDesc !=null">
+                and u.USR_DESC = #{usrDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="usrStatus !=null">
+                and u.USR_STATUS = #{usrStatus,jdbcType=CHAR}
+            </if>
+            <if test="lastLoginTime !=null">
+                and u.LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=CHAR}
+            </if>
+            <if test="failLoginTimes !=null">
+                and u.FAIL_LOGIN_TIMES = #{failLoginTimes,jdbcType=VARCHAR}
+            </if>
+            <if test="creObj !=null">
+                and u.CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+            </if>
+            <if test="creTim !=null">
+                and u.CRE_TIM = #{creTim,jdbcType=CHAR}
+            </if>
+            <if test="updObj !=null">
+                and u.UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+            </if>
+            <if test="updTim !=null">
+                and u.UPD_TIM = #{updTim,jdbcType=CHAR}
+            </if>
+        </trim>
+        order by u.CRE_TIM DESC
+        <include refid="pageFooter"/>
+    </select>
+    <select id="selectByCondition" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from AUTH_USR
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="usrId !=null">
+                and USR_ID = #{usrId,jdbcType=VARCHAR}
+            </if>
+            <if test="orgId !=null">
+                and ORG_ID = #{orgId,jdbcType=VARCHAR}
+            </if>
+            <if test="usrName !=null">
+                and USR_NAME = #{usrName,jdbcType=VARCHAR}
+            </if>
+            <if test="usrPsw !=null">
+                and USR_PSW = #{usrPsw,jdbcType=VARCHAR}
+            </if>
+            <if test="usrRealName !=null">
+                and USR_REAL_NAME = #{usrRealName,jdbcType=VARCHAR}
+            </if>
+            <if test="usrDesc !=null">
+                and USR_DESC = #{usrDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="usrStatus !=null">
+                and USR_STATUS = #{usrStatus,jdbcType=CHAR}
+            </if>
+            <if test="lastLoginTime !=null">
+                and LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=CHAR}
+            </if>
+            <if test="failLoginTimes !=null">
+                and FAIL_LOGIN_TIMES = #{failLoginTimes,jdbcType=VARCHAR}
+            </if>
+            <if test="creObj !=null">
+                and CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+            </if>
+            <if test="creTim !=null">
+                and CRE_TIM = #{creTim,jdbcType=CHAR}
+            </if>
+            <if test="updObj !=null">
+                and UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+            </if>
+            <if test="updTim !=null">
+                and UPD_TIM = #{updTim,jdbcType=CHAR}
+            </if>
+        </trim>
+    </select>
+    <select id="countByCondition" resultType="java.lang.Integer" parameterType="map">
+        select count(1)
+        from AUTH_USR u left join AUTH_ORG o on u.ORG_ID=o.ORG_ID
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="usrId !=null">
+                and u.USR_ID = #{usrId,jdbcType=VARCHAR}
+            </if>
+            <if test="orgId !=null">
+                and u.ORG_ID = #{orgId,jdbcType=VARCHAR}
+            </if>
+            <if test="usrName !=null">
+                and u.USR_NAME like CONCAT('%',#{usrName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="usrPsw !=null">
+                and u.USR_PSW = #{usrPsw,jdbcType=VARCHAR}
+            </if>
+            <if test="usrRealName !=null">
+                and u.USR_REAL_NAME like CONCAT('%',#{usrRealName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="usrDesc !=null">
+                and u.USR_DESC = #{usrDesc,jdbcType=VARCHAR}
+            </if>
+            <if test="usrStatus !=null">
+                and u.USR_STATUS = #{usrStatus,jdbcType=CHAR}
+            </if>
+            <if test="lastLoginTime !=null">
+                and u.LAST_LOGIN_TIME = #{lastLoginTime,jdbcType=CHAR}
+            </if>
+            <if test="failLoginTimes !=null">
+                and u.FAIL_LOGIN_TIMES = #{failLoginTimes,jdbcType=VARCHAR}
+            </if>
+            <if test="creObj !=null">
+                and u.CRE_OBJ = #{creObj,jdbcType=VARCHAR}
+            </if>
+            <if test="creTim !=null">
+                and u.CRE_TIM = #{creTim,jdbcType=CHAR}
+            </if>
+            <if test="updObj !=null">
+                and u.UPD_OBJ = #{updObj,jdbcType=VARCHAR}
+            </if>
+            <if test="updTim !=null">
+                and u.UPD_TIM = #{updTim,jdbcType=CHAR}
+            </if>
+        </trim>
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select USR_ID, ORG_ID, USR_NAME, USR_PSW, USR_REAL_NAME, USR_DESC, USR_STATUS, LAST_LOGIN_TIME, 
+    FAIL_LOGIN_TIMES, CRE_OBJ, CRE_TIM, UPD_OBJ, UPD_TIM
+    from AUTH_USR
+  </select>
+</mapper>
